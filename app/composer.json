@@ -1,0 +1,30 @@
+{
+    "name": "beupsoft/fenixtraining",
+    "type": "webapp",
+    "authors": [
+        {
+            "name": "Vadim Semeniuc",
+            "email": "semeniuc@int.pl"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Beupsoft\\Fenix\\App\\": "src/",
+            "Beupsoft\\App\\Config\\": "config/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Beupsoft\\Fenix\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=8.2",
+        "symfony/dotenv": "7.0.*",
+        "symfony/http-client": "7.0.*"
+    },
+    "require-dev": {
+        "symfony/maker-bundle": "^1.56",
+        "symfony/var-dumper": "^7.0"
+    }
+}

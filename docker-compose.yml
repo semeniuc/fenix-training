@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  nginx:
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./app:/var/www/project
+      - ./data/logs/nginx:/var/log/nginx
+    depends_on:
+      - php
+    networks:
+      - project
+
+  php:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./app:/var/www/project
+      - ./data/logs/php:/var/log/php
+      - ./data/logs/xdebug:/var/log/xdebug
+    networks:
+      - project
+networks:
+  project:
