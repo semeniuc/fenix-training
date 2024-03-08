@@ -5,11 +5,15 @@ namespace Beupsoft\Fenix\App;
 /**
  * Connect to Bitrix24 via REST API.
  */
-class Bitrix
+final class Bitrix
 {
     const VERSION = '1.36';
     const BATCH_COUNT = 50;         //count batch 1 query
     const TYPE_TRANSPORT = 'json';  // json or xml
+    const AUTH_FILE = '../var/key/bitrix/access.json';
+
+    const IS_SAVE_LOG = true;
+    const DIR_LOG = '../var/log/bitrix/';
 
     /**
      * call where install application even url
@@ -23,10 +27,10 @@ class Bitrix
             'install' => false
         ];
         if ($_REQUEST['event'] == 'ONAPPINSTALL' && !empty($_REQUEST['auth'])) {
-            $result['install'] = static::setAppSettings($_REQUEST['auth'], true);
+            $result['install'] = self::setAppSettings($_REQUEST['auth'], true);
         } elseif ($_REQUEST['PLACEMENT'] == 'DEFAULT') {
             $result['rest_only'] = false;
-            $result['install'] = static::setAppSettings(
+            $result['install'] = self::setAppSettings(
                 [
                     'access_token' => htmlspecialchars($_REQUEST['AUTH_ID']),
                     'expires_in' => htmlspecialchars($_REQUEST['AUTH_EXPIRES']),
@@ -39,7 +43,7 @@ class Bitrix
             );
         }
 
-        static::setLog(
+        self::setLog(
             [
                 'request' => $_REQUEST,
                 'result' => $result
@@ -68,12 +72,12 @@ class Bitrix
                 'error_information' => 'need install curl lib'
             ];
         }
-        $arSettings = static::getAppSettings();
+        $arSettings = self::getAppSettings();
         if ($arSettings !== false) {
             if (isset($arParams['this_auth']) && $arParams['this_auth'] == 'Y') {
                 $url = 'https://oauth.bitrix.info/oauth/token/';
             } else {
-                $url = $arSettings["client_endpoint"] . $arParams['method'] . '.' . static::TYPE_TRANSPORT;
+                $url = $arSettings["client_endpoint"] . $arParams['method'] . '.' . self::TYPE_TRANSPORT;
                 if (empty($arSettings['is_web_hook']) || $arSettings['is_web_hook'] != 'Y') {
                     $arParams['params']['auth'] = $arSettings['access_token'];
                 }
@@ -86,7 +90,7 @@ class Bitrix
                 curl_setopt($obCurl, CURLOPT_URL, $url);
                 curl_setopt($obCurl, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($obCurl, CURLOPT_POSTREDIR, 10);
-                curl_setopt($obCurl, CURLOPT_USERAGENT, 'Bitrix24 CRest PHP ' . static::VERSION);
+                curl_setopt($obCurl, CURLOPT_USERAGENT, 'Bitrix24 CRest PHP ' . self::VERSION);
                 if ($sPostFields) {
                     curl_setopt($obCurl, CURLOPT_POST, true);
                     curl_setopt($obCurl, CURLOPT_POSTFIELDS, $sPostFields);
@@ -106,17 +110,17 @@ class Bitrix
                 if (curl_errno($obCurl)) {
                     $info['curl_error'] = curl_error($obCurl);
                 }
-                if (static::TYPE_TRANSPORT == 'xml' && (!isset($arParams['this_auth']) || $arParams['this_auth'] != 'Y')) //auth only json support
+                if (self::TYPE_TRANSPORT == 'xml' && (!isset($arParams['this_auth']) || $arParams['this_auth'] != 'Y')) //auth only json support
                 {
                     $result = $out;
                 } else {
-                    $result = static::expandData($out);
+                    $result = self::expandData($out);
                 }
                 curl_close($obCurl);
 
                 if (!empty($result['error'])) {
                     if ($result['error'] == 'expired_token' && empty($arParams['this_auth'])) {
-                        $result = static::GetNewAuth($arParams);
+                        $result = self::GetNewAuth($arParams);
                     } else {
                         $arErrorInform = [
                             'expired_token'          => 'expired token, cant get new auth? Check access oauth server.',
@@ -138,7 +142,7 @@ class Bitrix
                     $result['error_information'] = $info['curl_error'];
                 }
 
-                static::setLog(
+                self::setLog(
                     [
                         'url'    => $url,
                         'info'   => $info,
@@ -150,7 +154,7 @@ class Bitrix
 
                 return $result;
             } catch (\Exception $e) {
-                static::setLog(
+                self::setLog(
                     [
                         'message' => $e->getMessage(),
                         'code' => $e->getCode(),
@@ -167,7 +171,7 @@ class Bitrix
                 ];
             }
         } else {
-            static::setLog(
+            self::setLog(
                 [
                     'params' => $arParams
                 ],
@@ -196,10 +200,10 @@ class Bitrix
             'params' => $params
         ];
         if (defined('C_REST_CURRENT_ENCODING')) {
-            $arPost['params'] = static::changeEncoding($arPost['params']);
+            $arPost['params'] = self::changeEncoding($arPost['params']);
         }
 
-        $result = static::callCurl($arPost);
+        $result = self::callCurl($arPost);
         return $result;
     }
 
@@ -231,14 +235,14 @@ class Bitrix
         $arResult = [];
         if (is_array($arData)) {
             if (defined('C_REST_CURRENT_ENCODING')) {
-                $arData = static::changeEncoding($arData);
+                $arData = self::changeEncoding($arData);
             }
             $arDataRest = [];
             $i = 0;
             foreach ($arData as $key => $data) {
                 if (!empty($data['method'])) {
                     $i++;
-                    if (static::BATCH_COUNT >= $i) {
+                    if (self::BATCH_COUNT >= $i) {
                         $arDataRest['cmd'][$key] = $data['method'];
                         if (!empty($data['params'])) {
                             $arDataRest['cmd'][$key] .= '?' . http_build_query($data['params']);
@@ -252,7 +256,7 @@ class Bitrix
                     'method' => 'batch',
                     'params' => $arDataRest
                 ];
-                $arResult = static::callCurl($arPost);
+                $arResult = self::callCurl($arPost);
             }
         }
         return $arResult;
@@ -269,7 +273,7 @@ class Bitrix
     private static function GetNewAuth($arParams)
     {
         $result = [];
-        $arSettings = static::getAppSettings();
+        $arSettings = self::getAppSettings();
         if ($arSettings !== false) {
             $arParamsAuth = [
                 'this_auth' => 'Y',
@@ -281,7 +285,7 @@ class Bitrix
                     'refresh_token' => $arSettings["refresh_token"],
                 ]
             ];
-            $newData = static::callCurl($arParamsAuth);
+            $newData = self::callCurl($arParamsAuth);
             if (isset($newData['C_REST_CLIENT_ID'])) {
                 unset($newData['C_REST_CLIENT_ID']);
             }
@@ -291,9 +295,9 @@ class Bitrix
             if (isset($newData['error'])) {
                 unset($newData['error']);
             }
-            if (static::setAppSettings($newData)) {
+            if (self::setAppSettings($newData)) {
                 $arParams['this_auth'] = 'N';
-                $result = static::callCurl($arParams);
+                $result = self::callCurl($arParams);
             }
         }
         return $result;
@@ -309,11 +313,11 @@ class Bitrix
     {
         $return = false;
         if (is_array($arSettings)) {
-            $oldData = static::getAppSettings();
+            $oldData = self::getAppSettings();
             if ($isInstall != true && !empty($oldData) && is_array($oldData)) {
                 $arSettings = array_merge($oldData, $arSettings);
             }
-            $return = static::setSettingData($arSettings);
+            $return = self::setSettingData($arSettings);
         }
         return $return;
     }
@@ -331,7 +335,7 @@ class Bitrix
             ];
             $isCurrData = true;
         } else {
-            $arData = static::getSettingData();
+            $arData = self::getSettingData();
             $isCurrData = false;
             if (
                 !empty($arData['access_token']) &&
@@ -356,8 +360,8 @@ class Bitrix
     protected static function getSettingData()
     {
         $return = [];
-        if (file_exists('..' . \AUTH_FILE_PATH)) {
-            $return = static::expandData(file_get_contents('..' . \AUTH_FILE_PATH));
+        if (file_exists(self::AUTH_FILE)) {
+            $return = self::expandData(file_get_contents(self::AUTH_FILE));
             if (defined("C_REST_CLIENT_ID") && !empty(\C_REST_CLIENT_ID)) {
                 $return['C_REST_CLIENT_ID'] = \C_REST_CLIENT_ID;
             }
@@ -379,8 +383,8 @@ class Bitrix
         if (is_array($data)) {
             $result = [];
             foreach ($data as $k => $item) {
-                $k = static::changeEncoding($k, $encoding);
-                $result[$k] = static::changeEncoding($item, $encoding);
+                $k = self::changeEncoding($k, $encoding);
+                $result[$k] = self::changeEncoding($item, $encoding);
             }
         } else {
             if ($encoding) {
@@ -402,9 +406,9 @@ class Bitrix
     protected static function wrapData($data, $debag = false)
     {
         if (defined('C_REST_CURRENT_ENCODING')) {
-            $data = static::changeEncoding($data, true);
+            $data = self::changeEncoding($data, true);
         }
-        $return = json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+        $return = json_encode($data, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_PRETTY_PRINT);
 
         if ($debag) {
             $e = json_last_error();
@@ -428,7 +432,7 @@ class Bitrix
     {
         $return = json_decode($data, true);
         if (defined('C_REST_CURRENT_ENCODING')) {
-            $return = static::changeEncoding($return, false);
+            $return = self::changeEncoding($return, false);
         }
         return $return;
     }
@@ -442,7 +446,7 @@ class Bitrix
 
     protected static function setSettingData($arSettings)
     {
-        return  (bool)file_put_contents('..' . \AUTH_FILE_PATH, static::wrapData($arSettings));
+        return  (bool)file_put_contents(self::AUTH_FILE, self::wrapData($arSettings));
     }
 
     /**
@@ -456,30 +460,31 @@ class Bitrix
     public static function setLog($arData, $type = '')
     {
         $return = false;
-        if (!defined("C_REST_BLOCK_LOG") || \C_REST_BLOCK_LOG !== true) {
-            if (defined("C_REST_LOGS_DIR")) {
-                $path = '..' . C_REST_LOGS_DIR;
-            } else {
-                $path = '..' . '/logs/';
-            }
-            $path .= date("Y-m-d/H") . '/';
 
-            if (!file_exists($path)) {
-                @mkdir($path, 0775, true);
+        if (self::IS_SAVE_LOG === true) 
+        {
+            $path = self::DIR_LOG;
+            (file_exists($path)) ?: @mkdir($path, 0775, true);
+            
+            $dataToJson = [
+                date('Y-m-d H:i:s') => [
+                    'type' => $type,
+                    'data' => $arData,
+                ],
+            ];
+
+            $file = date("Y-m-d") . ".json";
+
+            if (file_exists($path . $file)) {
+                $oldJsonLog = self::expandData(file_get_contents($path . $file));
+                $jsonLog = self::wrapData(array_merge($dataToJson, $oldJsonLog));
+            } else {
+                $jsonLog = self::wrapData($dataToJson);
             }
 
-            $path .= time() . '_' . $type . '_' . rand(1, 9999999) . 'log';
-            if (!defined("C_REST_LOG_TYPE_DUMP") || C_REST_LOG_TYPE_DUMP !== true) {
-                $jsonLog = static::wrapData($arData);
-                if ($jsonLog === false) {
-                    $return = file_put_contents($path . '_backup.txt', var_export($arData, true));
-                } else {
-                    $return = file_put_contents($path . '.json', $jsonLog);
-                }
-            } else {
-                $return = file_put_contents($path . '.txt', var_export($arData, true));
-            }
+            $return = file_put_contents($path . $file, $jsonLog);
         }
+
         return $return;
     }
 
@@ -498,7 +503,7 @@ class Bitrix
         }
 
         //creat setting file
-        file_put_contents(__DIR__ . '/settings_check.json', static::wrapData(['test' => 'data']));
+        file_put_contents(__DIR__ . '/settings_check.json', self::wrapData(['test' => 'data']));
         if (!file_exists(__DIR__ . '/settings_check.json')) {
             $return['setting_creat_error'] = 'Check permission! Recommended: folders: 775, files: 664';
         }
