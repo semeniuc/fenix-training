@@ -467,7 +467,7 @@ final class Bitrix
             (file_exists($path)) ?: @mkdir($path, 0775, true);
             
             $dataToJson = [
-                date('Y-m-d H:i:s') => [
+                date('H:i:s') => [
                     'type' => $type,
                     'data' => $arData,
                 ],
