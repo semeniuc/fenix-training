@@ -14,13 +14,13 @@ class IndexController
         // $dotenv = new Dotenv();
         // $dotenv->load(dirname(__DIR__, 2) . '/.env');
 
-        // $result = Bitrix::call("scope");
+        $result = Bitrix::call("scope");
 
         // $result = defined(static::class."::C_REST_LOGS_DIR");
-        // echo json_encode($result);
+        echo json_encode($result);
 
         // echo "index";
 
-        phpinfo();
+        // phpinfo();
     }
 }

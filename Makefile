@@ -1,3 +1,8 @@
+install:
+	make host-access
+	make start
+	make server-access
+	
 start:
 	docker compose up --build -d
 
@@ -8,13 +13,16 @@ restart:
 	make stop
 	make start
 
-php:
+bash:
 	docker compose exec -it php bash
 
+ngrok:
+	docker run --net=host -it -e NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN} ngrok/ngrok:latest http 80
+
 host-access:
-	sudo chgrp -R ${USER} /app
-	sudo chown -R ${USER}:${USER} /app
-	sudo chmod -R ug+rwx /app
+	sudo chgrp -R ${USER} app/ data/
+	sudo chown -R ${USER}:${USER} app/ data/
+	sudo chmod -R ug+rwx app/ data/
 
 server-access:
 	docker compose exec php chgrp -R www-data /var/www/project/
