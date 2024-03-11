@@ -22,9 +22,8 @@ ngrok:
 host-access:
 	sudo chgrp -R ${USER} app/ data/
 	sudo chown -R ${USER}:${USER} app/ data/
-	sudo chmod -R ug+rwx app/ data/
+	sudo chmod -R 755 app/ data/
 
 server-access:
-	docker compose exec php chgrp -R www-data /var/www/project/
-	docker compose exec php chown -R www-data:www-data /var/www/project/
-	docker compose exec php chmod -R ug+rwx /var/www/project/
+	docker compose exec php chown -R www-data:www-data /var/www/project/var
+	docker compose exec php chmod -R 775 /var/www/project/

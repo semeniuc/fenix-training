@@ -10,7 +10,7 @@ final class Bitrix
     const VERSION = '1.36';
     const BATCH_COUNT = 50;         //count batch 1 query
     const TYPE_TRANSPORT = 'json';  // json or xml
-    const AUTH_FILE = '../var/key/bitrix/access.json';
+    const DIR_SECRET = '../var/key/bitrix/';
 
     const IS_SAVE_LOG = true;
     const DIR_LOG = '../var/log/bitrix/';
@@ -360,8 +360,8 @@ final class Bitrix
     protected static function getSettingData()
     {
         $return = [];
-        if (file_exists(self::AUTH_FILE)) {
-            $return = self::expandData(file_get_contents(self::AUTH_FILE));
+        if (file_exists(self::DIR_SECRET . "secret.json")) {
+            $return = self::expandData(file_get_contents(self::DIR_SECRET . "secret.json"));
             if (defined("C_REST_CLIENT_ID") && !empty(\C_REST_CLIENT_ID)) {
                 $return['C_REST_CLIENT_ID'] = \C_REST_CLIENT_ID;
             }
@@ -446,7 +446,8 @@ final class Bitrix
 
     protected static function setSettingData($arSettings)
     {
-        return  (bool)file_put_contents(self::AUTH_FILE, self::wrapData($arSettings));
+        (file_exists(self::DIR_SECRET)) ?: mkdir(self::DIR_SECRET, 0775, true);
+        return  (bool)file_put_contents(self::DIR_SECRET . "secret.json" , self::wrapData($arSettings));
     }
 
     /**
@@ -483,50 +484,6 @@ final class Bitrix
             }
 
             $return = file_put_contents($path . $file, $jsonLog);
-        }
-
-        return $return;
-    }
-
-    /**
-     * check minimal settings server to work CRest
-     * @var $print boolean
-     * @return array of errors
-     */
-    public static function checkServer($print = true)
-    {
-        $return = [];
-
-        //check curl lib install
-        if (!function_exists('curl_init')) {
-            $return['curl_error'] = 'Need install curl lib.';
-        }
-
-        //creat setting file
-        file_put_contents(__DIR__ . '/settings_check.json', self::wrapData(['test' => 'data']));
-        if (!file_exists(__DIR__ . '/settings_check.json')) {
-            $return['setting_creat_error'] = 'Check permission! Recommended: folders: 775, files: 664';
-        }
-        unlink(__DIR__ . '/settings_check.json');
-        //creat logs folder and files
-        $path = __DIR__ . '/logs/' . date("Y-m-d/H") . '/';
-        if (!mkdir($path, 0775, true) && !file_exists($path)) {
-            $return['logs_folder_creat_error'] = 'Check permission! Recommended: folders: 775, files: 664';
-        } else {
-            file_put_contents($path . 'test.txt', var_export(['test' => 'data'], true));
-            if (!file_exists($path . 'test.txt')) {
-                $return['logs_file_creat_error'] = 'check permission! recommended: folders: 775, files: 664';
-            }
-            unlink($path . 'test.txt');
-        }
-
-        if ($print === true) {
-            if (empty($return)) {
-                $return['success'] = 'Success!';
-            }
-            echo '<pre>';
-            print_r($return);
-            echo '</pre>';
         }
 
         return $return;
