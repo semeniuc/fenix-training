@@ -1,7 +1,7 @@
 FROM php:8.3-fpm
 
 RUN apt-get update  \
-    && apt-get install -y git zip unzip wget pkg-config libpq-dev libxml2-dev libxslt1-dev libzip-dev libpng-dev libonig-dev libfreetype6-dev libjpeg62-turbo-dev libxml2-dev \
+    && apt-get install -y git zip unzip curl pkg-config libpq-dev libxml2-dev libxslt1-dev libzip-dev libpng-dev libonig-dev libfreetype6-dev libjpeg62-turbo-dev libxml2-dev \
     && apt-get clean \
     && apt-get autoclean
 
@@ -16,6 +16,10 @@ RUN pecl install apcu && docker-php-ext-enable apcu
 # xdebug
 RUN pecl install xdebug && docker-php-ext-enable xdebug
 COPY ./xdebug.ini /usr/local/etc/php/conf.d/
+
+# composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && composer --version
 
 # other configs
 COPY ./php.ini /usr/local/etc/php/conf.d/
