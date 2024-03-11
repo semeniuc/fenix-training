@@ -464,7 +464,7 @@ final class Bitrix
         if (self::IS_SAVE_LOG === true) 
         {
             $path = self::DIR_LOG;
-            (file_exists($path)) ?: @mkdir($path, 0775, true);
+            (file_exists($path)) ?: mkdir($path, 0775, true);
             
             $dataToJson = [
                 date('H:i:s') => [

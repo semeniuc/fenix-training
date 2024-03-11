@@ -7,8 +7,9 @@ use Beupsoft\Fenix\App\Controller\InstallController;
 
 class Kernel
 {
-    public function __construct(string $route)
+    public function __construct(string $requestUri)
     {
+        $route = $this->extract($requestUri);
         $this->execute($route);
     }
 
@@ -21,5 +22,10 @@ class Kernel
             // "/listener/deal"
             default => throw new \Exception(message: "Controller $route not found", code: 404),
         };
+    }
+
+    private function extract(string $url): string
+    {
+        return parse_url($url, PHP_URL_PATH);
     }
 }

@@ -6,6 +6,8 @@ require_once (dirname(__DIR__) . "/vendor/autoload.php");
 
 try {
     new Kernel($_SERVER["REQUEST_URI"]);
+
+    // dd($_SERVER);
 } catch (Exception $e) {
     echo json_encode([
         "code" => $e->getCode(),
