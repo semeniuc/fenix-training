@@ -5,9 +5,9 @@ namespace Beupsoft\Fenix\App\EventListener;
 class DealListener extends Listener
 {    
     private static $events = [
-        "add" => "onCrmDynamicItemAdd",
-        "upd" => "onCrmDynamicItemUpdate",
-        "del" => "onCrmDynamicItemDelete",
+        "add" => "onCrmDealAdd",
+        "upd" => "onCrmDealUpdate",
+        "del" => "onCrmDealDelete",
     ];
 
     public function __construct()
