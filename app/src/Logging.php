@@ -5,7 +5,7 @@ namespace Beupsoft\Fenix\App;
 final class Logging
 {
     private const IS_SAVE_LOG = true;
-    private const DIR_LOG = '../var/log/bitrix/';
+    private const DIR_LOG = '../var/log/';
 
     public static function save($arData, $type = '')
     {

@@ -28,3 +28,6 @@ host-access:
 server-access:
 	docker compose exec php chown -R www-data:www-data /var/www/project/var
 	docker compose exec php chmod -R 775 /var/www/project/
+
+clear-logs:
+	docker compose exec php rm -R var/log
