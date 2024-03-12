@@ -10,15 +10,18 @@ class SubscriptionController
 {
     public function __construct()
     {
-        // dd(["index"]);
-        // $dotenv = new Dotenv();
-        // $dotenv->load(dirname(__DIR__, 2) . '/.env');
-
-        // Logging::save($_REQUEST, 'listener');
-
         while (!empty($events = $this->getEventsData())) {
             foreach ($events as $event) {
                 switch ($event["EVENT_NAME"]) {
+                    case "ONCRMDEALADD":
+                        # code...
+                        break;
+                    case "ONCRMDEALUPDATE":
+                        # code...
+                        break;
+                    case "ONCRMDEALDELETE":
+                        # code...
+                        break;
                     case "ONCRMDYNAMICITEMADD":
                         # code...
                         break;
@@ -39,7 +42,7 @@ class SubscriptionController
                         break;
                 }
             }
-            Logging::save($events, "events");
+            Logging::save($events, "events", "listener");
         }
     }
 

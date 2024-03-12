@@ -7,13 +7,13 @@ final class Logging
     private const IS_SAVE_LOG = true;
     private const DIR_LOG = '../var/log/';
 
-    public static function save($arData, $type = '')
+    public static function save(mixed $arData, string $type = '', string $category = '')
     {
         $return = false;
 
         if (static::IS_SAVE_LOG === true) 
         {
-            $path = static::DIR_LOG;
+            $path = (!empty($category) ? static::DIR_LOG . $category . "/" : static::DIR_LOG);
             (file_exists($path)) ?: mkdir($path, 0775, true);
             
             $dataToJson = [
