@@ -125,8 +125,8 @@ final class Bitrix
                         $arErrorInform = [
                             'expired_token'          => 'expired token, cant get new auth? Check access oauth server.',
                             'invalid_token'          => 'invalid token, need reinstall application',
-                            'invalid_grant'          => 'invalid grant, check out define C_REST_CLIENT_SECRET or C_REST_CLIENT_ID',
-                            'invalid_client'         => 'invalid client, check out define C_REST_CLIENT_SECRET or C_REST_CLIENT_ID',
+                            'invalid_grant'          => 'invalid grant, check out define BITRIX24_CLIENT_SECRET or BITRIX24_CLIENT_ID',
+                            'invalid_client'         => 'invalid client, check out define BITRIX24_CLIENT_SECRET or BITRIX24_CLIENT_ID',
                             'QUERY_LIMIT_EXCEEDED'   => 'Too many requests, maximum 2 query by second',
                             'ERROR_METHOD_NOT_FOUND' => 'Method not found! You can see the permissions of the application: CRest::call(\'scope\')',
                             'NO_AUTH_FOUND'          => 'Some setup error b24, check in table "b_module_to_module" event "OnRestCheckAuth"',
@@ -279,18 +279,18 @@ final class Bitrix
                 'this_auth' => 'Y',
                 'params'    =>
                 [
-                    'client_id'     => $arSettings['C_REST_CLIENT_ID'],
+                    'client_id'     => $arSettings['BITRIX24_CLIENT_ID'],
                     'grant_type'    => 'refresh_token',
-                    'client_secret' => $arSettings['C_REST_CLIENT_SECRET'],
+                    'client_secret' => $arSettings['BITRIX24_CLIENT_SECRET'],
                     'refresh_token' => $arSettings["refresh_token"],
                 ]
             ];
             $newData = self::callCurl($arParamsAuth);
-            if (isset($newData['C_REST_CLIENT_ID'])) {
-                unset($newData['C_REST_CLIENT_ID']);
+            if (isset($newData['BITRIX24_CLIENT_ID'])) {
+                unset($newData['BITRIX24_CLIENT_ID']);
             }
-            if (isset($newData['C_REST_CLIENT_SECRET'])) {
-                unset($newData['C_REST_CLIENT_SECRET']);
+            if (isset($newData['BITRIX24_CLIENT_SECRET'])) {
+                unset($newData['BITRIX24_CLIENT_SECRET']);
             }
             if (isset($newData['error'])) {
                 unset($newData['error']);
@@ -362,12 +362,8 @@ final class Bitrix
         $return = [];
         if (file_exists(self::DIR_SECRET . "secret.json")) {
             $return = self::expandData(file_get_contents(self::DIR_SECRET . "secret.json"));
-            if (defined("C_REST_CLIENT_ID") && !empty(\C_REST_CLIENT_ID)) {
-                $return['C_REST_CLIENT_ID'] = \C_REST_CLIENT_ID;
-            }
-            if (defined("C_REST_CLIENT_SECRET") && !empty(\C_REST_CLIENT_SECRET)) {
-                $return['C_REST_CLIENT_SECRET'] = \C_REST_CLIENT_SECRET;
-            }
+            $return['BITRIX24_CLIENT_ID'] = getenv("BITRIX24_CLIENT_ID") ?? null;
+            $return['BITRIX24_CLIENT_SECRET'] = getenv("BITRIX24_CLIENT_SECRET")?? null;
         }
         return $return;
     }
