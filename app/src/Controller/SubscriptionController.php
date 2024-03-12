@@ -13,13 +13,7 @@ class SubscriptionController
         while (!empty($events = $this->getEventsData())) {
             foreach ($events as $event) {
                 switch ($event["EVENT_NAME"]) {
-                    case "ONCRMDEALADD":
-                        # code...
-                        break;
                     case "ONCRMDEALUPDATE":
-                        # code...
-                        break;
-                    case "ONCRMDEALDELETE":
                         # code...
                         break;
                     case "ONCRMDYNAMICITEMADD":
@@ -31,18 +25,17 @@ class SubscriptionController
                     case "ONCRMDYNAMICITEMDELETE":
                         # code...
                         break;
-                    case "ONCALENDARENTRYADD":
-                        # code...
-                        break;
                     case "ONCALENDARENTRYUPDATE":
                         # code...
                         break;
                     case "ONCALENDARENTRYDELETE":
                         # code...
                         break;
+                    default:
+                        Logging::save($events, "events", "listener");
                 }
             }
-            Logging::save($events, "events", "listener");
+            
         }
     }
 

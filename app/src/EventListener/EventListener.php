@@ -5,7 +5,6 @@ namespace Beupsoft\Fenix\App\EventListener;
 class EventListener extends Listener
 {    
     private static $events = [
-        "add" => "OnCalendarEntryAdd",
         "upd" => "OnCalendarEntryUpdate",
         "del" => "OnCalendarEntryDelete",
     ];
