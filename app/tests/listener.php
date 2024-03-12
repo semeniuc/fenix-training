@@ -4,36 +4,50 @@ use Beupsoft\Fenix\App\Service\InstallService;
 use Beupsoft\Fenix\App\Bitrix;
 
 try {
-    // $install = new InstallService();
-    // $response = $install->listener();
 
-    $response = Bitrix::call("event.get");
+    function deleteListeners(): array
+    {
+        $data = [];
+
+        $listeners = getListeners();
+
+        if ($listeners) {
+            foreach ($listeners as $listener) {
+                $data[$listener["event"]] = [
+                    "method" => "event.unbind",
+                    "params" => [
+                        "event" => $listener["event"],
+                    ],
+                ];
+
+                if (isset($listener["handler"])) {
+                    $data[$listener["event"]]["params"]["handler"] = $listener["handler"];
+                } else {
+                    $data[$listener["event"]]["params"]["event_type"] = "offline";
+                }
+            }
+        }
+
+        return Bitrix::callBatch($data);
+    }
+
+    function getListeners()
+    {
+        return Bitrix::call("event.get")["result"];
+    }
+
+    function getEvents(): array
+    {
+        return Bitrix::call("event.offline.get")["events"] ?? [];
+    }
+
+    // $response = deleteListeners();
+    $response = getListeners();
+    // $response = getEvents();
 
 
-    // $response = Bitrix::callBatch([
-    //     [
-    //         "method" => "event.bind",
-    //         "params" => [
-    //             "event" => "ONOFFLINEEVENT",
-    //             "handler" => $_ENV["APP_PUBLIC_URL"] . "listener",
-    //             'options' => [
-    //                 'minTimeout' => 5,
-    //             ],
-    //         ],
-    //     ]
-    // ]);
-
-
-    //     $response = Bitrix::callBatch([
-    //     [
-    //         "method" => "event.unbind",
-    //         "params" => [
-    //             "event" => "ONOFFLINEEVENT",
-    //             "handler" => $_ENV["APP_PUBLIC_URL"]. "/listener",
-    //         ],
-    //     ]
-    // ]);
-
+    // $response = Bitrix::call("event.get");
+    // $response = Bitrix::call("event.offline.get");
 
 
 

@@ -24,11 +24,12 @@ class Listener
             ];
         }
 
+        $handler = $_ENV["APP_PUBLIC_URL"] . "listener";
         $data["onOfflineEvent"] = [
             "method" => "event.bind",
             "params" => [
                 "event" => "ONOFFLINEEVENT",
-                "handler" => getenv("APP_PUBLIC_URL") . "listener" ?? $_ENV["APP_PUBLIC_URL"] . "listener" ,
+                "handler" => $handler,
                 'options' => [
                     'minTimeout' => 5,
                 ],
