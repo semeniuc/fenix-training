@@ -26,9 +26,7 @@ final class Bitrix
             'rest_only' => true,
             'install' => false
         ];
-        if ($_REQUEST['event'] == 'ONAPPINSTALL' && !empty($_REQUEST['auth'])) {
-            $result['install'] = self::setAppSettings($_REQUEST['auth'], true);
-        } elseif ($_REQUEST['PLACEMENT'] == 'DEFAULT') {
+        if ($_REQUEST['PLACEMENT'] == 'DEFAULT') {
             $result['rest_only'] = false;
             $result['install'] = self::setAppSettings(
                 [

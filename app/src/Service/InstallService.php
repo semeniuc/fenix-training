@@ -14,7 +14,21 @@ class InstallService
         # code...
     }
 
-    public function listener(): array
+    public function execute(): bool
+    {
+        if ($isSuccessInstall = $this->app()) {
+            $this->listener();
+        }
+
+        return $isSuccessInstall;
+    }
+
+    private function app(): bool 
+    {
+        return Bitrix::installApp()["install"];
+    }
+
+    private function listener(): array
     {
         $data = array_merge(
             (new TrainingListener())->getListenerEvents(),
@@ -22,11 +36,6 @@ class InstallService
             (new EventListener())->getListenerEvents(),
         );
 
-        return $this->execute($data);
-    }
-
-    private function execute(array $data): array 
-    {
         return Bitrix::callBatch($data);
     }
 }

@@ -3,12 +3,14 @@
 namespace Beupsoft\Fenix\App\Controller;
 
 use Beupsoft\Fenix\App\Bitrix;
+use Beupsoft\Fenix\App\Service\InstallService;
 
 class InstallController
 {
     public function __construct()
     {
-        $this->response(Bitrix::installApp()['install']);
+        $install = new InstallService();
+        $this->response($install->execute());
     }
 
     private function response(bool $isSuccessInstall): void
@@ -26,7 +28,7 @@ class InstallController
         if ($isSuccessInstall === true) {
             echo $htmlHead . "<body>installation has been finished</body>";
         } else {
-            echo $htmlHead . "<body>installation error</body>";
+            echo "<body>installation error</body>";
         }
     }
 }
