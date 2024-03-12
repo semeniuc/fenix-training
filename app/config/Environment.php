@@ -5,7 +5,7 @@ namespace Beupsoft\App\Config;
 class Environment
 {
     /**
-     * @return string Returns the environment
+     * @return string Returns the environmentAPP_ENV
      */
     protected static function defineMode(): string
     {

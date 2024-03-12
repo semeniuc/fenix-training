@@ -7,21 +7,35 @@ try {
     // $install = new InstallService();
     // $response = $install->listener();
 
-    // $response = Bitrix::call("event.get");
+    $response = Bitrix::call("event.get");
 
-    dd(getenv("APP_PUBLIC_URL"));
-    $response = Bitrix::callBatch([
-        [
-            "method" => "event.bind",
-            "params" => [
-                "event" => "ONOFFLINEEVENT",
-                "handler" => getenv("APP_PUBLIC_URL"),
-                'options' => [
-                    'minTimeout' => 5,
-                ],
-            ],
-        ]
-    ]);
+
+    // $response = Bitrix::callBatch([
+    //     [
+    //         "method" => "event.bind",
+    //         "params" => [
+    //             "event" => "ONOFFLINEEVENT",
+    //             "handler" => $_ENV["APP_PUBLIC_URL"] . "listener",
+    //             'options' => [
+    //                 'minTimeout' => 5,
+    //             ],
+    //         ],
+    //     ]
+    // ]);
+
+
+    //     $response = Bitrix::callBatch([
+    //     [
+    //         "method" => "event.unbind",
+    //         "params" => [
+    //             "event" => "ONOFFLINEEVENT",
+    //             "handler" => $_ENV["APP_PUBLIC_URL"]. "/listener",
+    //         ],
+    //     ]
+    // ]);
+
+
+
 
 
 } catch (Throwable $th) {

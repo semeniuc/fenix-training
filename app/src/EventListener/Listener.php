@@ -28,7 +28,7 @@ class Listener
             "method" => "event.bind",
             "params" => [
                 "event" => "ONOFFLINEEVENT",
-                "handler" => getenv("APP_PUBLIC_URL"),
+                "handler" => getenv("APP_PUBLIC_URL") . "listener" ?? $_ENV["APP_PUBLIC_URL"] . "listener" ,
                 'options' => [
                     'minTimeout' => 5,
                 ],
