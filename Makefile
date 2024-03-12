@@ -2,6 +2,7 @@ install:
 	make host-access
 	make start
 	make server-access
+	make ngrok
 	
 start:
 	docker compose up --build -d
