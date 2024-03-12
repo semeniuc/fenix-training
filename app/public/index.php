@@ -7,12 +7,7 @@ require_once (dirname(__DIR__) . "/vendor/autoload.php");
 try {
     $dotenv = new Dotenv();
     $dotenv->load("../.env", "../.env.dev");
-    // new Kernel($_SERVER["REQUEST_URI"]);
-
-    require_once (dirname(__DIR__) . "/tests/listener.php");
-
-
-
+    new Kernel($_SERVER["REQUEST_URI"]);
 } catch (Exception $e) {
     echo json_encode([
         "code" => $e->getCode(),
