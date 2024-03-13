@@ -2,14 +2,27 @@
 
 namespace Beupsoft\Fenix\App\DTO;
 
+use DateTime;
+
 class DealDTO 
 {
     private ?int $id;
-    private ?int $categoryId;
-    private ?string $stageId;
-    private ?int $assignedById;
-    private ?array $days;
-    private ?string $time;
+    private ?int $categoryId; // categoryId
+    private ?string $stageId; // stageId
+    private ?int $assignedById; // assignedById
+    private ?array $days; // ufCrm_1709801608762
+    private ?int $time; // ufCrm_1709801802210
+
+    public function __construct(array $data)
+    {
+        $this->id = $data["id"] ?? null;
+        $this->categoryId = $data["categoryId"] ?? null;
+        $this->stageId = $data["stageId"] ?? null;
+        $this->assignedById = $data["assignedById"] ?? null;
+        $this->days = $data["ufCrm_1709801608762"] ?? null;
+        $this->time = $data["ufCrm_1709801802210"] ?? null;
+    }
+  
 
     /**
      * Get the value of id
@@ -17,18 +30,6 @@ class DealDTO
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set the value of id
-     *
-     * @return  self
-     */ 
-    public function setId(?int $id)
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     /**
@@ -40,35 +41,11 @@ class DealDTO
     }
 
     /**
-     * Set the value of categoryId
-     *
-     * @return  self
-     */ 
-    public function setCategoryId(?int $categoryId)
-    {
-        $this->categoryId = $categoryId;
-
-        return $this;
-    }
-
-    /**
      * Get the value of stageId
      */ 
     public function getStageId()
     {
         return $this->stageId;
-    }
-
-    /**
-     * Set the value of stageId
-     *
-     * @return  self
-     */ 
-    public function setStageId(?string $stageId)
-    {
-        $this->stageId = $stageId;
-
-        return $this;
     }
 
     /**
@@ -80,18 +57,6 @@ class DealDTO
     }
 
     /**
-     * Set the value of assignedById
-     *
-     * @return  self
-     */ 
-    public function setAssignedById(?int $assignedById)
-    {
-        $this->assignedById = $assignedById;
-
-        return $this;
-    }
-
-    /**
      * Get the value of days
      */ 
     public function getDays()
@@ -100,34 +65,10 @@ class DealDTO
     }
 
     /**
-     * Set the value of days
-     *
-     * @return  self
-     */ 
-    public function setDays(?array $days)
-    {
-        $this->days = $days;
-
-        return $this;
-    }
-
-    /**
      * Get the value of time
      */ 
     public function getTime()
     {
         return $this->time;
-    }
-
-    /**
-     * Set the value of time
-     *
-     * @return  self
-     */ 
-    public function setTime(?string $time)
-    {
-        $this->time = $time;
-
-        return $this;
     }
 }

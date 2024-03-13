@@ -9,26 +9,13 @@ use Beupsoft\Fenix\App\DTO\DealDTO;
 # TODO: Настроить получение проверяемых полей и значений из конфига
 class DealRepository
 {
-    public function findByDealId(int $dealId): DealDTO
+    public function get(int $dealId): DealDTO
     {
         $dealData = Bitrix::call("crm.item.get", [
             "entityTypeId" => 2,
             "id" => $dealId,
         ])["result"]["item"];
 
-        if ($dealData) {
-            $dealDTO = (new DealDTO())
-                ->setId($dealData["id"] ?? null)
-                ->setCategoryId($dealData["categoryId"] ?? null)
-                ->setStageId($dealData["stageId"] ?? null)
-                ->setAssignedById($dealData["assignedById"] ?? null)
-                ->setDays($dealData["ufCrm_1709801608762"] ?? null)
-                ->setTime($dealData["ufCrm_1709801802210"] ?? null)
-                ;
-        } else {
-            throw new Exception("Not found data for the deal: {$dealId}", 404);
-        }
-
-        return $dealDTO;
+        return new DealDTO($dealData);
     }
 }

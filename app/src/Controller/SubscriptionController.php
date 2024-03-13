@@ -54,7 +54,8 @@ class SubscriptionController
     private function getDeal(int $dealId): DealDTO
     {
         $repository = new DealRepository();
-        return $repository->findByDealId($dealId);
+        $deal = $repository->get($dealId);
+        return $deal;
     }
 
     // private function routeDeal(DealDTO $deal): void
@@ -77,9 +78,9 @@ class SubscriptionController
     private function createTrainings(DealDTO $deal): void
     {
         $repository = new TrainingRepository();
-        $trainingsData = $repository->findTrainingsByDealId($deal->getId());
+        $trainingsData = $repository->findByDealId($deal->getId());
 
-        Logging::save($trainingsData, "trainingsData", "listener");
+        // Logging::save($trainingsData, "trainingsData", "listener");
         dd($trainingsData);
     }
 }

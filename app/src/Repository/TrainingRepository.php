@@ -15,20 +15,22 @@ class TrainingRepository
 
     }
 
-    // public function get(int $trainingId): TrainingDTO
-    // {
-    //     $trainingData = Bitrix::call("crm.item.get", [
-    //         "entityTypeId" => 2,
-    //         "id" => $dealId,
-    //     ])["result"]["item"];
-    // }
+    public function get(int $trainingId): TrainingDTO
+    {
+        $trainingData = Bitrix::call("crm.item.get", [
+            "entityTypeId" => 2,
+            "id" => $trainingId,
+        ])["result"]["item"];
+
+        return new TrainingDTO($trainingData);
+    }
 
     public function upd(int $id, object $dto) 
     {
 
     }
 
-    public function findTrainingsByDealId(int $dealId): array
+    public function findByDealId(int $dealId): array
     {
         $trainingsDTO = [];
 
@@ -43,19 +45,8 @@ class TrainingRepository
             foreach ($trainingsData as $training) {
                 $datetimeTraining = (!empty($training['ufCrm22_1709804621873'])) ? new DateTime($training['ufCrm22_1709804621873']) : null;
 
-                $dto = new TrainingDTO();
-                $dto
-                    ->setId($training['id'] ?? null)
-                    ->setTitle($training['title'] ?? null)
-                    ->setCategoryId(intval($training['categoryId'] ?? null))
-                    ->setStageId($training['stageId'] ?? null)
-                    ->setDealId($training['parentId2'] ?? null)
-                    ->setEventId($training['ufCrm22EventId'] ?? null)
-                    ->setAssignedById($training['assignedById'] ?? null)
-                    ->setDatetimeTraining($datetimeTraining)
-                    ->setWhoIsClosed($training['ufCrm22_1709810191984'] ?? null);
-
-
+                $dto = new TrainingDTO($training);
+                
                 if ($dto->getId() !== null) {
                     $trainingsDTO[] = $dto;
                 }
