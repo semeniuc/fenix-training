@@ -7,17 +7,17 @@ use Beupsoft\Fenix\App\DTO\DealDTO;
 use Beupsoft\Fenix\App\Repository\DealRepository;
 use Beupsoft\Fenix\App\Repository\TrainingRepository;
 
-class DealService
+class EventCalendarService
 {
     private DealDTO $dealDTO;
     private array $trainingsDTO;
 
-    public function __construct(int $dealId)
+    public function __construct(int $eventId)
     {
         $this->dealDTO = $this->getDeal($dealId);
         $this->trainingsDTO = $this->getTrainingsByDeal($this->dealDTO);
 
-        dd(["DealService" => $this->trainingsDTO]);
+        dd($this->trainingsDTO);
     }
 
     public function handle(): void
