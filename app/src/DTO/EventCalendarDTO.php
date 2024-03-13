@@ -14,6 +14,7 @@ class EventCalendarDTO
     private ?DateTime $from;
     private ?DateTime $to;
     private ?string $name;
+    private ?string $description;
     private ?string $is_meeting;
     private ?string $location;
     private ?array $attendees;
@@ -30,10 +31,35 @@ class EventCalendarDTO
         $this->from = (!empty($data['from'])) ? new DateTime($data['from']) : null;
         $this->to = (!empty($data['to'])) ? new DateTime($data['to']) : null;
         $this->name = $data['name'] ?? null;
+        $this->name = $data['description'] ?? null;
         $this->is_meeting = $data['is_meeting'] ?? null;
         $this->location = $data['location'] ?? null;
         $this->attendees = $data['attendees'] ?? null;
         $this->color = $data['color'] ?? null;
         $this->text_color = $data['text_color'] ?? null;
+    }
+
+    /**
+     * Get the value of id
+     */ 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Get the value of type
+     */ 
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Get the value of ownerId
+     */ 
+    public function getOwnerId()
+    {
+        return $this->ownerId;
     }
 }

@@ -12,7 +12,11 @@ class TrainingService
 
     public function __construct(int $trainingId)
     {
+        $this->trainingRepository = new TrainingRepository();
+        $this->eventCalendarRepository = new EventCalendarRepository();
+
         $this->trainingsDTO = $this->getTraining($trainingId);
+        
 
         dd($this->trainingsDTO);
     }
@@ -34,13 +38,8 @@ class TrainingService
 
     private function getTraining(int $trainingId): TrainingDTO
     {
-        $repository = new TrainingRepository();
-        $training = $repository->get($trainingId);
-        return $training;
+        return $this->trainingRepository->get($trainingId);
     }
 
-    private getEventCalendar(int $eventId): EventCalendarDTO
-    {
-        $event = new EventCalendarDTO();
-    }
+    
 }

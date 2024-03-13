@@ -9,34 +9,19 @@ use Beupsoft\Fenix\App\Repository\EventCalendarRepository;
 class EventCalendarService
 {
     private EventCalendarRepository $eventCalendarRepository;
-    private EventCalendarDTO $eventCalendarDTO;
 
     public function __construct()
     {
         $this->eventCalendarRepository = new EventCalendarRepository();
-
-        if ($eventId) {
-            $this->eventCalendarDTO = $this->getEventCalendar($eventId);
-        } else {
-
-        }
-        
-
-        dd($this->eventCalendarDTO);
     }
 
-    public function handle(): void
-    {
-        
-    }
-
-    private function getEventCalendar(int $eventId): EventCalendarDTO
-    {
-        return  $this->eventCalendarRepository->get($eventId);
-    }
-
-    private function createEventCalendar(array $data) : EventCalendarDTO 
+    public function createEventCalendar(array $data) : EventCalendarDTO 
     {
         return  $this->eventCalendarRepository->add($data);
+    }
+
+    public function deleteEventCalendar(int $eventId): void
+    {
+        $this->eventCalendarRepository->del($eventId);
     }
 }
