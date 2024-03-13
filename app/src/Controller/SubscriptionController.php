@@ -23,13 +23,13 @@ class SubscriptionController
                     case "ONCRMDYNAMICITEMUPDATE":
                         # code...
                         break;
-                    case "ONCRMDYNAMICITEMDELETE":
+                    case "ONCRMDYNAMICITEMDELETE_149":
                         # code...
                         break;
-                    case "ONCALENDARENTRYUPDATE":
+                    case "ONCRMDYNAMICITEMUPDATE_149":
                         # code...
                         break;
-                    case "ONCALENDARENTRYDELETE":
+                    case "ONCALENDARENTRYDELETE_149":
                         # code...
                         break;
                     default:

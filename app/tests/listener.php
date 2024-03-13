@@ -78,7 +78,7 @@ try {
     }
 
     // $response = deleteListeners();
-    $response = deleteHandlerListener();
+    // $response = deleteHandlerListener();
     $response = getListeners();
     // $response = getEvents();
 
