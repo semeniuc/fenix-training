@@ -3,12 +3,8 @@
 namespace Beupsoft\Fenix\App\Controller;
 
 use Beupsoft\Fenix\App\Bitrix;
-use Beupsoft\Fenix\App\DTO\DealDTO;
 use Beupsoft\Fenix\App\Logging;
-use Beupsoft\Fenix\App\Repository\DealRepository;
-use Beupsoft\Fenix\App\Repository\TrainingRepository;
-use Exception;
-use Symfony\Component\Dotenv\Dotenv;
+use Beupsoft\Fenix\App\Service\DealService;
 
 class SubscriptionController
 {
@@ -18,9 +14,7 @@ class SubscriptionController
             foreach ($events as $event) {
                 switch ($event["EVENT_NAME"]) {
                     case "ONCRMDEALUPDATE":
-                        $deal = $this->getDeal($event["EVENT_DATA"]["FIELDS"]["ID"]);
-                        // $this->routeDeal($deal);
-                        $this->createTrainings($deal);
+                        new DealService($event["EVENT_DATA"]["FIELDS"]["ID"]);
                         break;
                     case "ONCRMDYNAMICITEMADD":
                         # code...
@@ -38,10 +32,11 @@ class SubscriptionController
                         # code...
                         break;
                     default:
-                        // Logging::save($events, "events", "listener");
+                        break;
                 }
             }
-            
+
+            Logging::save($events, "events", "listener");     
         }
     }
 
@@ -49,38 +44,5 @@ class SubscriptionController
     {
         $response = Bitrix::call("event.offline.get");
         return $response["result"]["events"] ?? [];
-    }
-
-    private function getDeal(int $dealId): DealDTO
-    {
-        $repository = new DealRepository();
-        $deal = $repository->get($dealId);
-        return $deal;
-    }
-
-    // private function routeDeal(DealDTO $deal): void
-    // {
-    //     if($deal->getPipeline() == 6) {
-    //         switch ($deal->getStage()) {
-    //             case 'C6:PREPARATION':
-    //                 # create trainings
-    //                 break;
-    //             case 'C6:PREPAYMENT_INVOICE':
-    //                 # update trainings
-    //                 break;
-    //             default:
-    //                 # skip
-    //                 break;
-    //         }
-    //     }
-    // }
-
-    private function createTrainings(DealDTO $deal): void
-    {
-        $repository = new TrainingRepository();
-        $trainingsData = $repository->findByDealId($deal->getId());
-
-        // Logging::save($trainingsData, "trainingsData", "listener");
-        dd($trainingsData);
-    }
+    } 
 }
