@@ -21,8 +21,21 @@ class EventCalendarRepository
         return $eventData;
     }
 
-    public function add(object $dto) 
+    public function add(array $data) 
     {
-        
+        $eventData = Bitrix::call("calendar.event.add", [
+            "type" => "user",
+            "ownerId" => 572,
+            "accessibility" => "busy", 
+            "from" => "",
+            "to" => "",
+            "section" => "",
+            "name" => "",
+            "is_meeting" => "Y",
+            "location" => "",
+            "attendees" => [],
+            "color" => "#9cbe1c",
+            "text_color" => "#283033",
+        ]);
     }
 }

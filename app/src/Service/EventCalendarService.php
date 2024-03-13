@@ -3,53 +3,40 @@
 namespace Beupsoft\Fenix\App\Service;
 
 use Exception;
-use Beupsoft\Fenix\App\DTO\DealDTO;
-use Beupsoft\Fenix\App\Repository\DealRepository;
-use Beupsoft\Fenix\App\Repository\TrainingRepository;
+use Beupsoft\Fenix\App\DTO\EventCalendarDTO;
+use Beupsoft\Fenix\App\Repository\EventCalendarRepository;
 
 class EventCalendarService
 {
-    private DealDTO $dealDTO;
-    private array $trainingsDTO;
+    private EventCalendarRepository $eventCalendarRepository;
+    private EventCalendarDTO $eventCalendarDTO;
 
-    public function __construct(int $eventId)
+    public function __construct(?int $eventId)
     {
-        $this->dealDTO = $this->getDeal($dealId);
-        $this->trainingsDTO = $this->getTrainingsByDeal($this->dealDTO);
+        $this->eventCalendarRepository = new EventCalendarRepository();
 
-        dd($this->trainingsDTO);
+        if ($eventId) {
+            $this->eventCalendarDTO = $this->getEventCalendar($eventId);
+        } else {
+
+        }
+        
+
+        dd($this->eventCalendarDTO);
     }
 
     public function handle(): void
     {
-        if($this->dealDTO->getCategoryId() == 6) {
-            switch ($this->dealDTO->getStageId()) {
-                case 'C6:PREPARATION':
-                    # code...
-                    break;
-                case 'C6:PREPAYMENT_INVOICE':
-                    # code...
-                    break;
-                default:
-                    # code...
-                    break;
-            }
-        }
         
     }
 
-    private function getDeal(int $dealId): DealDTO
+    private function getEventCalendar(int $eventId): EventCalendarDTO
     {
-        $repository = new DealRepository();
-        $deal = $repository->get($dealId);
-        return $deal;
-    } 
+        return  $this->eventCalendarRepository->get($eventId);
+    }
 
-    private function getTrainingsByDeal(DealDTO $deal): array
+    private function createEventCalendar() : EventCalendarDTO 
     {
-        $repository = new TrainingRepository();
-        $trainingsDTO = $repository->findByDealId($deal->getId());
-
-        return $trainingsDTO;
+        
     }
 }

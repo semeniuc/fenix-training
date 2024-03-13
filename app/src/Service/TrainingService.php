@@ -4,8 +4,7 @@ namespace Beupsoft\Fenix\App\Service;
 
 use Exception;
 use Beupsoft\Fenix\App\DTO\TrainingDTO;
-use Beupsoft\Fenix\App\Repository\DealRepository;
-use Beupsoft\Fenix\App\Repository\TrainingRepository;
+use Beupsoft\Fenix\App\DTO\EventCalendarDTO;
 
 class TrainingService
 {
@@ -38,5 +37,10 @@ class TrainingService
         $repository = new TrainingRepository();
         $training = $repository->get($trainingId);
         return $training;
+    }
+
+    private getEventCalendar(int $eventId): EventCalendarDTO
+    {
+        $event = new EventCalendarDTO();
     }
 }
