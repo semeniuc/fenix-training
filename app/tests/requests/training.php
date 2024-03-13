@@ -3,11 +3,11 @@
 use Beupsoft\Fenix\App\Service\TrainingService;
 
 try {
-    $trainingId = 4;
+    $trainingId = 2;
 
     $training = new TrainingService();
     // $response = $training->getTraining($trainingId);
-    $response = $training->handle($trainingId, "del");
+    $response = $training->handle($trainingId, "upd");
 
 } catch (Throwable $th) {
     $response = [

@@ -18,11 +18,6 @@ class TrainingService
         $this->eventCalendar = new EventCalendarService();
     }
 
-    public function getTraining(int $trainingId): TrainingDTO
-    {
-        return $this->trainingRepository->get($trainingId);
-    }
-
     public function handle(int $trainingId, string $eventType): void
     {
         $trainingDTO = $this->getTraining($trainingId);
@@ -36,14 +31,21 @@ class TrainingService
                 # skip
                 break;
             default:
-                # Create event
-                $eventCalendarDTO = $this->createEventCalendarForTraining($trainingDTO);
+                if ($trainingDTO->getStageId() !== "DT149_30:FAIL") {
+                    # Create event
+                    $eventCalendarDTO = $this->createEventCalendarForTraining($trainingDTO);
 
-                # Save event
-                if ($eventId = $eventCalendarDTO->getId()) {
-                    $this->addEventCalendarToTraining($trainingId, $eventId);
-                } 
+                    # Save event
+                    if ($eventId = $eventCalendarDTO->getId()) {
+                        $this->addEventCalendarToTraining($trainingId, $eventId);
+                    }
+                }
         }
+    }
+
+    public function getTraining(int $trainingId): TrainingDTO
+    {
+        return $this->trainingRepository->get($trainingId);
     }
 
     private function createEventCalendarForTraining(TrainingDTO $trainingDTO): EventCalendarDTO
