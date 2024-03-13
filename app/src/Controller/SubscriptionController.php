@@ -15,7 +15,7 @@ class SubscriptionController
             foreach ($events as $event) {
                 switch ($event["EVENT_NAME"]) {
                     case "ONCRMDEALUPDATE":
-                        new DealService($event["EVENT_DATA"]["FIELDS"]["ID"]);
+                        (new DealService())->handle($event["EVENT_DATA"]["FIELDS"]["ID"], "upd");
                         break;
                     case "ONCRMDYNAMICITEMADD_149":
                         (new TrainingService())->handle($event["EVENT_DATA"]["FIELDS"]["ID"], "add");

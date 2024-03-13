@@ -9,25 +9,23 @@ use Beupsoft\Fenix\App\Repository\TrainingRepository;
 
 class DealService
 {
-    private DealDTO $dealDTO;
-    private array $trainingsDTO;
-
-    public function __construct(int $dealId)
+    public function __construct()
     {
-        $this->dealDTO = $this->getDeal($dealId);
-        $this->trainingsDTO = $this->getTrainingsByDeal($this->dealDTO);
-
-        dd(["DealService" => $this->trainingsDTO]);
     }
 
-    public function handle(): void
+    public function handle(int $dealId, string $eventType): void
     {
-        if($this->dealDTO->getCategoryId() == 6) {
-            switch ($this->dealDTO->getStageId()) {
-                case 'C6:PREPARATION':
+        $dealDTO = $this->getDeal($dealId);
+
+        $categoryId = $dealDTO->getCategoryId();
+        $stageId = $dealDTO->getStageId();
+
+        if($categoryId == 6) {
+            switch ($stageId) {
+                case 'C6:PREPARATION': // Init
                     # code...
                     break;
-                case 'C6:PREPAYMENT_INVOICE':
+                case 'C6:PREPAYMENT_INVOICE': // Pause
                     # code...
                     break;
                 default:
@@ -35,7 +33,6 @@ class DealService
                     break;
             }
         }
-        
     }
 
     private function getDeal(int $dealId): DealDTO
