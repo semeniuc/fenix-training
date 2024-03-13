@@ -11,6 +11,11 @@ class Kernel
     public function __construct(string $requestUri)
     {
         $route = $this->extract($requestUri);
+        
+        if ($route["/favicon.ico"]) {
+            exit;
+        }
+
         $this->execute($route);
     }
 
@@ -32,6 +37,7 @@ class Kernel
 
     private function test():void
     {
-        require_once (dirname(__DIR__) . "/tests/listener.php");
+        // require_once (dirname(__DIR__) . "/tests/listener.php");
+        require_once (dirname(__DIR__) . "/tests/events.php");
     }
 }
