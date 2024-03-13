@@ -18,7 +18,7 @@ class TrainingRepository
     public function get(int $trainingId): TrainingDTO
     {
         $trainingData = Bitrix::call("crm.item.get", [
-            "entityTypeId" => 2,
+            "entityTypeId" => 149,
             "id" => $trainingId,
         ])["result"]["item"];
 
