@@ -26,10 +26,11 @@ class EventCalendarRepository
         $eventData = Bitrix::call("calendar.event.add", [
             "type" => "user",
             "ownerId" => 572,
+            "section" => 132,
+
             "accessibility" => "busy", 
             "from" => "",
             "to" => "",
-            "section" => "",
             "name" => "",
             "is_meeting" => "Y",
             "location" => "",

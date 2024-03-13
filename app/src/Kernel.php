@@ -29,6 +29,7 @@ class Kernel
             "/test" => $this->test("events"),
             "/request" => $this->request("trainig"),
             "/request/sections" => $this->request("sections"),
+            "/request/event" => $this->request("event"),
 
             default => throw new \Exception(message: "Controller $route not found", code: 404),
         };

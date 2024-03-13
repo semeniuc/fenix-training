@@ -11,7 +11,7 @@ class EventCalendarService
     private EventCalendarRepository $eventCalendarRepository;
     private EventCalendarDTO $eventCalendarDTO;
 
-    public function __construct(?int $eventId)
+    public function __construct()
     {
         $this->eventCalendarRepository = new EventCalendarRepository();
 
@@ -35,8 +35,8 @@ class EventCalendarService
         return  $this->eventCalendarRepository->get($eventId);
     }
 
-    private function createEventCalendar() : EventCalendarDTO 
+    private function createEventCalendar(array $data) : EventCalendarDTO 
     {
-        
+        return  $this->eventCalendarRepository->add($data);
     }
 }
