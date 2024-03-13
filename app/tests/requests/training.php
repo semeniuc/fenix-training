@@ -5,7 +5,8 @@ use Beupsoft\Fenix\App\Service\TrainingService;
 try {
     $trainingId = 4;
 
-    $response = new TrainingService($trainingId);
+    $training = new TrainingService();
+    $response = $training->getTraining($trainingId);
 
 } catch (Throwable $th) {
     $response = [

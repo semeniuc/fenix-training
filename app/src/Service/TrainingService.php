@@ -5,23 +5,21 @@ namespace Beupsoft\Fenix\App\Service;
 use Exception;
 use Beupsoft\Fenix\App\DTO\TrainingDTO;
 use Beupsoft\Fenix\App\DTO\EventCalendarDTO;
+use Beupsoft\Fenix\App\Repository\TrainingRepository;
+use Beupsoft\Fenix\App\Repository\EventCalendarRepository;
 
 class TrainingService
 {
-    private TrainingDTO $trainingsDTO;
+    private TrainingRepository $trainingRepository;
+    private EventCalendarRepository $eventCalendarRepository;
 
-    public function __construct(int $trainingId)
+    public function __construct()
     {
         $this->trainingRepository = new TrainingRepository();
         $this->eventCalendarRepository = new EventCalendarRepository();
-
-        $this->trainingsDTO = $this->getTraining($trainingId);
-        
-
-        dd($this->trainingsDTO);
     }
 
-    public function handle(string $command): void
+    public function handle(TrainingDTO $trainingDTO, string $command): void
     {
         switch ($command) {
             case 'add':
@@ -36,7 +34,7 @@ class TrainingService
         }
     }
 
-    private function getTraining(int $trainingId): TrainingDTO
+    public function getTraining(int $trainingId): TrainingDTO
     {
         return $this->trainingRepository->get($trainingId);
     }

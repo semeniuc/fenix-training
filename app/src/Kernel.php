@@ -26,8 +26,11 @@ class Kernel
             "/install" => new InstallController,
             "/listener" => new SubscriptionController,
 
-            "/test" => $this->test("events"),
-            "/request" => $this->request("trainig"),
+
+            "/test/listener" => $this->test("listener"),
+            "/test/events" => $this->test("events"),
+
+            "/request/training" => $this->request("training"),
             "/request/sections" => $this->request("sections"),
             "/request/event" => $this->request("event"),
 

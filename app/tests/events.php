@@ -7,13 +7,14 @@ use Beupsoft\Fenix\App\Controller\SubscriptionController;
 try {
     function getEvents(): array
     {
-        return Bitrix::call("event.offline.get")["events"] ?? [];
+        return Bitrix::call("event.offline.get")["result"]["events"] ?? [];
     }
 
-    // $response = getEvents();
+    $response = getEvents();
+    // $response = ["test"];
 
 
-    $response = new SubscriptionController();
+    // $response = new SubscriptionController();
 
 } catch (Throwable $th) {
     $response = [

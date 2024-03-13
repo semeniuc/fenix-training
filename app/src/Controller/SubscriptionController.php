@@ -5,6 +5,7 @@ namespace Beupsoft\Fenix\App\Controller;
 use Beupsoft\Fenix\App\Bitrix;
 use Beupsoft\Fenix\App\Logging;
 use Beupsoft\Fenix\App\Service\DealService;
+use Beupsoft\Fenix\App\Service\TrainingService;
 
 class SubscriptionController
 {
@@ -17,7 +18,7 @@ class SubscriptionController
                         new DealService($event["EVENT_DATA"]["FIELDS"]["ID"]);
                         break;
                     case "ONCRMDYNAMICITEMADD":
-                        # code...
+                        new TrainingService();
                         break;
                     case "ONCRMDYNAMICITEMUPDATE":
                         # code...
