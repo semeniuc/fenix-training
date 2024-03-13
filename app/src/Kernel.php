@@ -25,7 +25,10 @@ class Kernel
             "/" => new IndexController,
             "/install" => new InstallController,
             "/listener" => new SubscriptionController,
-            "/test" => $this->test(),
+
+            "/test" => $this->test("events"),
+            "/request" => $this->request("trainig"),
+
             default => throw new \Exception(message: "Controller $route not found", code: 404),
         };
     }
@@ -35,9 +38,13 @@ class Kernel
         return parse_url($url, PHP_URL_PATH);
     }
 
-    private function test():void
+    private function test(string $name):void
     {
-        // require_once (dirname(__DIR__) . "/tests/listener.php");
-        require_once (dirname(__DIR__) . "/tests/events.php");
+        require_once (dirname(__DIR__) . "/tests/" . $name . ".php");
+    }
+
+    private function request(string $name):void
+    {
+        require_once (dirname(__DIR__) . "/tests/requests/" . $name . ".php");
     }
 }
