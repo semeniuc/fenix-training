@@ -20,8 +20,8 @@ class EventCalendarService
         return  $this->eventCalendarRepository->add($data);
     }
 
-    public function deleteEventCalendar(int $eventId): void
+    public function deleteEventCalendar(int $eventId): bool
     {
-        $this->eventCalendarRepository->del($eventId);
+        return $this->eventCalendarRepository->del($eventId);
     }
 }

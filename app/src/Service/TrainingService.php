@@ -4,15 +4,18 @@ namespace Beupsoft\Fenix\App\Service;
 
 use Exception;
 use Beupsoft\Fenix\App\DTO\TrainingDTO;
+use Beupsoft\Fenix\App\DTO\EventCalendarDTO;
 use Beupsoft\Fenix\App\Repository\TrainingRepository;
 
 class TrainingService
 {
     private TrainingRepository $trainingRepository;
+    private EventCalendarService $eventCalendar;
 
     public function __construct()
     {
         $this->trainingRepository = new TrainingRepository();
+        $this->eventCalendar = new EventCalendarService();
     }
 
     public function getTraining(int $trainingId): TrainingDTO
@@ -20,10 +23,31 @@ class TrainingService
         return $this->trainingRepository->get($trainingId);
     }
 
-    public function createEventCalendarForTraining(int $trainingId): ?int 
+    public function handle(int $trainingId, string $eventType): void
     {
         $trainingDTO = $this->getTraining($trainingId);
+        # Delete old event
+        if ($eventId = $trainingDTO->getEventId()) {
+            $this->deleteEventCalendarFromTraining($eventId);
+        }
 
+        switch ($eventType) {
+            case 'del':
+                # skip
+                break;
+            default:
+                # Create event
+                $eventCalendarDTO = $this->createEventCalendarForTraining($trainingDTO);
+
+                # Save event
+                if ($eventId = $eventCalendarDTO->getId()) {
+                    $this->addEventCalendarToTraining($trainingId, $eventId);
+                } 
+        }
+    }
+
+    private function createEventCalendarForTraining(TrainingDTO $trainingDTO): EventCalendarDTO
+    {
         $trainingId = $trainingDTO->getId();
         $title = $trainingDTO->getTitle();
         $datetime = $trainingDTO->getDatetimeTraining();
@@ -31,16 +55,7 @@ class TrainingService
         $from = ($datetime) ? $datetime->format("Y-m-d H:i:s") : null;
         $to = ($datetime) ? $datetime->modify("+1 hour")->format("Y-m-d H:i:s") : null;
 
-        $eventCalendar = new EventCalendarService();
-
-        
-        if ($eventId = $trainingDTO->getEventId()) {
-            # Delete old event
-            $eventCalendar->deleteEventCalendar($eventId);
-        }
-        
-        # Create event
-        $eventCalendarDTO = $eventCalendar->createEventCalendar([
+        return $this->eventCalendar->createEventCalendar([
             "type" => "user",
             "ownerId" => 572,
             "section" => 132,
@@ -55,20 +70,17 @@ class TrainingService
             "color" => "#9cbe1c",
             "text_color" => "#283033",
         ]);
-
-        if ($eventId = $eventCalendarDTO->getId()) {
-            # Save event
-            $this->addEventToTraining($trainingId, $eventId);
-            return $eventId;
-        } else {
-            return null;
-        }
     }
 
-    private function addEventToTraining(int $trainingId, int $eventId): bool
+    private function addEventCalendarToTraining(int $trainingId, int $eventId): bool
     {
         return $this->trainingRepository->upd($trainingId, [
             "ufCrm22EventId" => $eventId,
         ]);
+    }
+
+    private function deleteEventCalendarFromTraining(int $eventId): bool
+    {
+        return $this->eventCalendar->deleteEventCalendar($eventId);
     }
 }

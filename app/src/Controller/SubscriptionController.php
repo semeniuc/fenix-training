@@ -18,15 +18,13 @@ class SubscriptionController
                         new DealService($event["EVENT_DATA"]["FIELDS"]["ID"]);
                         break;
                     case "ONCRMDYNAMICITEMADD_149":
-                        $training = new TrainingService();
-                        $training->createEventCalendarForTraining($event["EVENT_DATA"]["FIELDS"]["ID"]);
+                        (new TrainingService())->handle($event["EVENT_DATA"]["FIELDS"]["ID"], "add");
                         break;
                     case "ONCRMDYNAMICITEMUPDATE_149":
-                        $training = new TrainingService();
-                        $training->createEventCalendarForTraining($event["EVENT_DATA"]["FIELDS"]["ID"]);
+                        (new TrainingService())->handle($event["EVENT_DATA"]["FIELDS"]["ID"], "upd");
                         break;
                     case "ONCRMDYNAMICITEMDELETE_149":
-                        # code...
+                        (new TrainingService())->handle($event["EVENT_DATA"]["FIELDS"]["ID"], "del");
                         break;
                     case "ONCALENDARENTRYUPDATE":
                         # code...

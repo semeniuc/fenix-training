@@ -7,7 +7,7 @@ try {
 
     $training = new TrainingService();
     // $response = $training->getTraining($trainingId);
-    $response = $training->createEventCalendarForTraining($trainingId);
+    $response = $training->handle($trainingId, "del");
 
 } catch (Throwable $th) {
     $response = [
