@@ -19,7 +19,8 @@ class SubscriptionController
                 switch ($event["EVENT_NAME"]) {
                     case "ONCRMDEALUPDATE":
                         $deal = $this->getDeal($event["EVENT_DATA"]["FIELDS"]["ID"]);
-                        $this->routeDeal($deal);
+                        // $this->routeDeal($deal);
+                        $this->createTrainings($deal);
                         break;
                     case "ONCRMDYNAMICITEMADD":
                         # code...
@@ -76,6 +77,9 @@ class SubscriptionController
     private function createTrainings(DealDTO $deal): void
     {
         $repository = new TrainingRepository();
-        $repository->findTrainingsByDealId($deal->getId());
+        $trainingsData = $repository->findTrainingsByDealId($deal->getId());
+
+        // Logging::save($trainingsData, "trainingsData", "listener");
+        dd($trainingsData);
     }
 }

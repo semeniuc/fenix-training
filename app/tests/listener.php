@@ -59,7 +59,17 @@ try {
 
     function getListeners()
     {
-        return Bitrix::call("event.get");
+        return Bitrix::call("event.get");$handler = $_ENV["APP_PUBLIC_URL"] . "listener";
+        // $data["onOfflineEvent"] = [
+        //     "method" => "event.bind",
+        //     "params" => [
+        //         "event" => "ONOFFLINEEVENT",
+        //         "handler" => $handler,
+        //         'options' => [
+        //             'minTimeout' => 5,
+        //         ],
+        //     ],
+        // ];
     }
 
     function getEvents(): array

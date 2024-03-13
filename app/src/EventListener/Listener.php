@@ -24,17 +24,19 @@ class Listener
             ];
         }
 
-        $handler = $_ENV["APP_PUBLIC_URL"] . "listener";
-        $data["onOfflineEvent"] = [
-            "method" => "event.bind",
-            "params" => [
-                "event" => "ONOFFLINEEVENT",
-                "handler" => $handler,
-                'options' => [
-                    'minTimeout' => 5,
-                ],
-            ],
-        ];
+        # TODO: После тестирования включить подписку на оффлайн события
+
+        // $handler = $_ENV["APP_PUBLIC_URL"] . "listener";
+        // $data["onOfflineEvent"] = [
+        //     "method" => "event.bind",
+        //     "params" => [
+        //         "event" => "ONOFFLINEEVENT",
+        //         "handler" => $handler,
+        //         'options' => [
+        //             'minTimeout' => 5,
+        //         ],
+        //     ],
+        // ];
 
         return $data;
     }
