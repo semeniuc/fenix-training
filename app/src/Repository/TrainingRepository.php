@@ -25,9 +25,15 @@ class TrainingRepository
         return new TrainingDTO($trainingData);
     }
 
-    public function upd(int $id, object $dto) 
+    public function upd(int $trainingId, array $data): bool 
     {
+        $trainingData = Bitrix::call("crm.item.update", [
+            "entityTypeId" => 149,
+            "id" => $trainingId,
+            "fields" => $data,
+        ])["result"]["item"];
 
+        return ($trainingData) ? true : false;
     }
 
     public function findByDealId(int $dealId): array

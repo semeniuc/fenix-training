@@ -4,19 +4,15 @@ namespace Beupsoft\Fenix\App\Service;
 
 use Exception;
 use Beupsoft\Fenix\App\DTO\TrainingDTO;
-use Beupsoft\Fenix\App\DTO\EventCalendarDTO;
 use Beupsoft\Fenix\App\Repository\TrainingRepository;
-use Beupsoft\Fenix\App\Repository\EventCalendarRepository;
 
 class TrainingService
 {
     private TrainingRepository $trainingRepository;
-    private EventCalendarRepository $eventCalendarRepository;
 
     public function __construct()
     {
         $this->trainingRepository = new TrainingRepository();
-        $this->eventCalendarRepository = new EventCalendarRepository();
     }
 
     public function getTraining(int $trainingId): TrainingDTO
@@ -24,7 +20,7 @@ class TrainingService
         return $this->trainingRepository->get($trainingId);
     }
 
-    public function createEventCalendarForTraining(int $trainingId) 
+    public function createEventCalendarForTraining(int $trainingId): ?int 
     {
         $trainingDTO = $this->getTraining($trainingId);
 
@@ -36,7 +32,15 @@ class TrainingService
         $to = ($datetime) ? $datetime->modify("+1 hour")->format("Y-m-d H:i:s") : null;
 
         $eventCalendar = new EventCalendarService();
-        $eventCalendar->createEventCalendar([
+
+        
+        if ($eventId = $trainingDTO->getEventId()) {
+            # Delete old event
+            $eventCalendar->deleteEventCalendar($eventId);
+        }
+        
+        # Create event
+        $eventCalendarDTO = $eventCalendar->createEventCalendar([
             "type" => "user",
             "ownerId" => 572,
             "section" => 132,
@@ -50,6 +54,21 @@ class TrainingService
             "attendees" => [572],
             "color" => "#9cbe1c",
             "text_color" => "#283033",
+        ]);
+
+        if ($eventId = $eventCalendarDTO->getId()) {
+            # Save event
+            $this->addEventToTraining($trainingId, $eventId);
+            return $eventId;
+        } else {
+            return null;
+        }
+    }
+
+    private function addEventToTraining(int $trainingId, int $eventId): bool
+    {
+        return $this->trainingRepository->upd($trainingId, [
+            "ufCrm22EventId" => $eventId,
         ]);
     }
 }

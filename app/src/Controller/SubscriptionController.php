@@ -22,7 +22,8 @@ class SubscriptionController
                         $training->createEventCalendarForTraining($event["EVENT_DATA"]["FIELDS"]["ID"]);
                         break;
                     case "ONCRMDYNAMICITEMUPDATE_149":
-                        # code...
+                        $training = new TrainingService();
+                        $training->createEventCalendarForTraining($event["EVENT_DATA"]["FIELDS"]["ID"]);
                         break;
                     case "ONCRMDYNAMICITEMDELETE_149":
                         # code...

@@ -23,6 +23,8 @@ class TrainingDTO
         $this->categoryId = $data["categoryId"] ?? null;
         $this->stageId = $data["stageId"] ?? null;
         $this->dealId = $data["parentId2"] ?? null;
+        $this->eventId = $data["ufCrm22EventId"] ?? null;
+        $this->assignedById = $data["assignedById"] ?? null;
         $this->datetimeTraining = (!empty($data['ufCrm22_1709804621873'])) ? new DateTime($data['ufCrm22_1709804621873']) : null;
         $this->whoIsClosed = $data["ufCrm22_1709810191984"] ?? null;
     }
