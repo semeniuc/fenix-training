@@ -10,8 +10,6 @@ class DealDTO
     private ?array $days;
     private ?string $time;
 
-    
-
     /**
      * Get the value of id
      */ 
