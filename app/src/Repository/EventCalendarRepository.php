@@ -15,19 +15,19 @@ class EventCalendarRepository
         $data = Bitrix::call("calendar.event.getbyid", ["id" => $eventId])["result"];
 
         $eventCalendarDTO = new EventCalendarDTO([
-            "id" => (int )$data["ID"],
-            "type" => $data["CAL_TYPE"],
-            "ownerId" => (int) $data["OWNER_ID"],
-            "section" => (int) $data["SECTION_ID"],
-            "accessibility" => $data["ACCESSIBILITY"],
-            "from" => $data["DATE_FROM"],
-            "to" => $data["DATE_TO"],
-            "name" => $data["NAME"],
-            "description" => $data["DESCRIPTION"],
-            "is_meeting" => $data["IS_MEETING"],
-            "location" => $data["LOCATION"],
+            "id" => $data["ID"] ?? null,
+            "type" => $data["CAL_TYPE"] ?? null,
+            "ownerId" => $data["OWNER_ID"] ?? null,
+            "section" => $data["SECTION_ID"] ?? null,
+            "accessibility" => $data["ACCESSIBILITY"] ?? null,
+            "from" => $data["DATE_FROM"] ?? null,
+            "to" => $data["DATE_TO"] ?? null,
+            "name" => $data["NAME"] ?? null,
+            "description" => $data["DESCRIPTION"] ?? null,
+            "is_meeting" => $data["IS_MEETING"] ?? null,
+            "location" => $data["LOCATION"] ?? null,
             "attendees" => (!empty($data["ATTENDEE_LIST"])) ? array_map(fn($item) => $item["id"], $data["ATTENDEE_LIST"]) : null,
-            "color" => $data["COLOR"],
+            "color" => $data["COLOR"] ?? null,
         ]);
 
         return $eventCalendarDTO;
@@ -64,6 +64,6 @@ class EventCalendarRepository
             "id" => $eventCalendarDTO->getId(),
             "type" => $eventCalendarDTO->getType(),
             "ownerId" => $eventCalendarDTO->getOwnerId(),
-        ])["result"];
+        ])["result"] ?? false;
     }
 }
