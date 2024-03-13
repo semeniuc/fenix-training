@@ -17,19 +17,20 @@ class SubscriptionController
                     case "ONCRMDEALUPDATE":
                         new DealService($event["EVENT_DATA"]["FIELDS"]["ID"]);
                         break;
-                    case "ONCRMDYNAMICITEMADD":
-                        new TrainingService();
+                    case "ONCRMDYNAMICITEMADD_149":
+                        $training = new TrainingService();
+                        $training->createEventCalendarForTraining($event["EVENT_DATA"]["FIELDS"]["ID"]);
                         break;
-                    case "ONCRMDYNAMICITEMUPDATE":
+                    case "ONCRMDYNAMICITEMUPDATE_149":
                         # code...
                         break;
                     case "ONCRMDYNAMICITEMDELETE_149":
                         # code...
                         break;
-                    case "ONCRMDYNAMICITEMUPDATE_149":
+                    case "ONCALENDARENTRYUPDATE":
                         # code...
                         break;
-                    case "ONCALENDARENTRYDELETE_149":
+                    case "ONCALENDARENTRYDELETE":
                         # code...
                         break;
                     default:
@@ -37,7 +38,7 @@ class SubscriptionController
                 }
             }
 
-            Logging::save($events, "events", "listener");     
+            Logging::save($events, "events", "listener");
         }
     }
 
@@ -45,5 +46,5 @@ class SubscriptionController
     {
         $response = Bitrix::call("event.offline.get");
         return $response["result"]["events"] ?? [];
-    } 
+    }
 }
