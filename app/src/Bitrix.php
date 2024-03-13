@@ -360,8 +360,8 @@ final class Bitrix
         $return = [];
         if (file_exists(self::DIR_SECRET . "secret.json")) {
             $return = self::expandData(file_get_contents(self::DIR_SECRET . "secret.json"));
-            $return['BITRIX24_CLIENT_ID'] = getenv("BITRIX24_CLIENT_ID") ?? $_ENV["BITRIX24_CLIENT_ID"];
-            $return['BITRIX24_CLIENT_SECRET'] = getenv("BITRIX24_CLIENT_SECRET")?? $_ENV["BITRIX24_CLIENT_SECRET"];
+            $return['BITRIX24_CLIENT_ID'] = $_ENV["BITRIX24_CLIENT_ID"];
+            $return['BITRIX24_CLIENT_SECRET'] = $_ENV["BITRIX24_CLIENT_SECRET"];
         }
         return $return;
     }
