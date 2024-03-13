@@ -37,21 +37,23 @@ class EventCalendarRepository
     {
         $eventCalendarDTO = new EventCalendarDTO($data);
         
-        $eventData = Bitrix::call("calendar.event.add", [
-            "type" => "user",
-            "ownerId" => 572,
-            "section" => 132,
+        $eventId = Bitrix::call("calendar.event.add", [
+            "type" => $eventCalendarDTO->getType(),
+            "ownerId" => $eventCalendarDTO->getOwnerId(),
+            "section" => $eventCalendarDTO->getSection(),
+            "accessibility" => $eventCalendarDTO->getAccessibility(), 
+            "from" => ($eventCalendarDTO->getFrom()) ? $eventCalendarDTO->getFrom()->format("Y-m-d H:i:s") : null,
+            "to" => ($eventCalendarDTO->getTo()) ? $eventCalendarDTO->getTo()->format("Y-m-d H:i:s") : null,
+            "name" => $eventCalendarDTO->getName(),
+            "description" => $eventCalendarDTO->getDescription(),
+            "is_meeting" => $eventCalendarDTO->getIsmeeting(),
+            "location" => $eventCalendarDTO->getLocation(),
+            "attendees" => $eventCalendarDTO->getAttendees(),
+            "color" => $eventCalendarDTO->getColor(),
+            "text_color" => $eventCalendarDTO->getTextColor(),
+        ])["result"];
 
-            "accessibility" => "busy", 
-            "from" => "",
-            "to" => "",
-            "name" => "",
-            "is_meeting" => "Y",
-            "location" => "",
-            "attendees" => [],
-            "color" => "#9cbe1c",
-            "text_color" => "#283033",
-        ]);
+        $eventCalendarDTO->setId($eventId);
 
         return $eventCalendarDTO;
     }

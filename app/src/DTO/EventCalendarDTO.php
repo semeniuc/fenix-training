@@ -15,11 +15,11 @@ class EventCalendarDTO
     private ?DateTime $to;
     private ?string $name;
     private ?string $description;
-    private ?string $is_meeting;
+    private ?string $isMeeting;
     private ?string $location;
     private ?array $attendees;
     private ?string $color;
-    private ?string $text_color;
+    private ?string $textColor;
 
     public function __construct(array $data)
     {
@@ -31,12 +31,12 @@ class EventCalendarDTO
         $this->from = (!empty($data['from'])) ? new DateTime($data['from']) : null;
         $this->to = (!empty($data['to'])) ? new DateTime($data['to']) : null;
         $this->name = $data['name'] ?? null;
-        $this->name = $data['description'] ?? null;
-        $this->is_meeting = $data['is_meeting'] ?? null;
+        $this->description = $data['description'] ?? null;
+        $this->isMeeting = $data['is_meeting'] ?? null;
         $this->location = $data['location'] ?? null;
         $this->attendees = $data['attendees'] ?? null;
         $this->color = $data['color'] ?? null;
-        $this->text_color = $data['text_color'] ?? null;
+        $this->textColor = $data['text_color'] ?? null;
     }
 
     /**
@@ -45,6 +45,12 @@ class EventCalendarDTO
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setId(int $id)
+    {
+        $this->id = $id;
+        return $this;
     }
 
     /**
@@ -61,5 +67,93 @@ class EventCalendarDTO
     public function getOwnerId()
     {
         return $this->ownerId;
+    }
+
+    /**
+     * Get the value of section
+     */ 
+    public function getSection()
+    {
+        return $this->section;
+    }
+
+    /**
+     * Get the value of accessibility
+     */ 
+    public function getAccessibility()
+    {
+        return $this->accessibility;
+    }
+
+    /**
+     * Get the value of from
+     */ 
+    public function getFrom()
+    {
+        return $this->from;
+    }
+
+    /**
+     * Get the value of to
+     */ 
+    public function getTo()
+    {
+        return $this->to;
+    }
+
+    /**
+     * Get the value of name
+     */ 
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Get the value of description
+     */ 
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Get the value of is_meeting
+     */ 
+    public function getIsmeeting()
+    {
+        return $this->isMeeting;
+    }
+
+    /**
+     * Get the value of location
+     */ 
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * Get the value of attendees
+     */ 
+    public function getAttendees()
+    {
+        return $this->attendees;
+    }
+
+    /**
+     * Get the value of color
+     */ 
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * Get the value of text_color
+     */ 
+    public function getTextColor()
+    {
+        return $this->textColor;
     }
 }
