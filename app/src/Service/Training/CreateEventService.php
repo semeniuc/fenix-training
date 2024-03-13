@@ -1,13 +1,11 @@
 <?php 
 
-namespace Beupsoft\Fenix\App;
+namespace Beupsoft\Fenix\App\Service\Deal;
 
-class CreateTrainingService 
-{   
+class CreateEventService
+{
     public function __construct()
     {
         # code...
     }
-
-    
 }

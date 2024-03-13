@@ -9,7 +9,7 @@ try {
     {
         $data = [];
 
-        $listeners = getListeners();
+        $listeners = getListeners()["result"] ?? [];
 
         if ($listeners) {
             foreach ($listeners as $listener) {
@@ -33,7 +33,7 @@ try {
 
     function getListeners()
     {
-        return Bitrix::call("event.get")["result"];
+        return Bitrix::call("event.get");
     }
 
     function getEvents(): array
