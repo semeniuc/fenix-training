@@ -5,6 +5,32 @@ use Beupsoft\Fenix\App\Bitrix;
 
 try {
 
+    function deleteHandlerListener(): array
+    {
+        $data = [];
+
+        $listeners = getListeners()["result"] ?? [];
+
+        if ($listeners) {
+            foreach ($listeners as $listener) {
+
+                if (isset($listener["handler"])) {
+                    $data[$listener["event"]] = [
+                        "method" => "event.unbind",
+                        "params" => [
+                            "event" => $listener["event"],
+                            "handler" => $listener["handler"],
+                        ],
+                    ];
+
+                    break;
+                } 
+            }
+        }
+
+        return Bitrix::callBatch($data);
+    }
+
     function deleteListeners(): array
     {
         $data = [];
@@ -42,6 +68,7 @@ try {
     }
 
     // $response = deleteListeners();
+    $response = deleteHandlerListener();
     $response = getListeners();
     // $response = getEvents();
 
