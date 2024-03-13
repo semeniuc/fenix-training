@@ -10,15 +10,11 @@ class TrainingDTO
     private ?string $title; // title
     private ?string $categoryId; // categoryId
     private ?string $stageId; // stageId
-
     private ?int $dealId; // parentId2
     private ?int $eventId; // ufCrm22EventId
-    private ?int $responsibleId; // assignedById
-
+    private ?int $assignedById; // assignedById
     private ?DateTime $datetimeTraining; // ufCrm22_1709804621873
-
     private ?string $whoIsClosed; // ufCrm22_1709810191984
-
 
     /**
      * Get the value of id
@@ -33,7 +29,7 @@ class TrainingDTO
      *
      * @return  self
      */ 
-    public function setId($id)
+    public function setId(?int $id)
     {
         $this->id = $id;
 
@@ -53,7 +49,7 @@ class TrainingDTO
      *
      * @return  self
      */ 
-    public function setTitle($title)
+    public function setTitle(?string $title)
     {
         $this->title = $title;
 
@@ -73,7 +69,7 @@ class TrainingDTO
      *
      * @return  self
      */ 
-    public function setCategoryId($categoryId)
+    public function setCategoryId(?int $categoryId)
     {
         $this->categoryId = $categoryId;
 
@@ -93,7 +89,7 @@ class TrainingDTO
      *
      * @return  self
      */ 
-    public function setStageId($stageId)
+    public function setStageId(?string $stageId)
     {
         $this->stageId = $stageId;
 
@@ -113,7 +109,7 @@ class TrainingDTO
      *
      * @return  self
      */ 
-    public function setDealId($dealId)
+    public function setDealId(?int $dealId)
     {
         $this->dealId = $dealId;
 
@@ -133,7 +129,7 @@ class TrainingDTO
      *
      * @return  self
      */ 
-    public function setEventId($eventId)
+    public function setEventId(?int $eventId)
     {
         $this->eventId = $eventId;
 
@@ -141,21 +137,21 @@ class TrainingDTO
     }
 
     /**
-     * Get the value of responsibleId
+     * Get the value of assignedById
      */ 
-    public function getResponsibleId()
+    public function getAssignedById()
     {
-        return $this->responsibleId;
+        return $this->assignedById;
     }
 
     /**
-     * Set the value of responsibleId
+     * Set the value of assignedById
      *
      * @return  self
      */ 
-    public function setResponsibleId($responsibleId)
+    public function setAssignedById(?int $assignedById)
     {
-        $this->responsibleId = $responsibleId;
+        $this->assignedById = $assignedById;
 
         return $this;
     }
@@ -173,7 +169,7 @@ class TrainingDTO
      *
      * @return  self
      */ 
-    public function setDatetimeTraining($datetimeTraining)
+    public function setDatetimeTraining(?DateTime $datetimeTraining)
     {
         $this->datetimeTraining = $datetimeTraining;
 
@@ -193,7 +189,7 @@ class TrainingDTO
      *
      * @return  self
      */ 
-    public function setWhoIsClosed($whoIsClosed)
+    public function setWhoIsClosed(?string $whoIsClosed)
     {
         $this->whoIsClosed = $whoIsClosed;
 

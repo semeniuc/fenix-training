@@ -3,17 +3,13 @@
 namespace Beupsoft\Fenix\App\Repository;
 
 use Exception;
+use DateTime;
 use Beupsoft\Fenix\App\Bitrix;
 use Beupsoft\Fenix\App\DTO\TrainingDTO;
 
 # TODO: Настроить получение проверяемых полей и значений из конфига
 class TrainingRepository
 {
-    public function __construct()
-    {
-        # code...
-    }
-
     public function add(object $dto) 
     {
 
@@ -43,16 +39,29 @@ class TrainingRepository
             ], 
         ])["result"]["items"];
 
-        // if ($trainingsData) {
-        //     $dealDTO = (new TrainingDTO())
-        //     ->setId($dealData["id"] ?? null)
-        //     ->setPipeline($dealData["categoryId"] ?? null)
-        //     ->setDays($dealData["ufCrm_1709801608762"] ?? null)
-        //     ->setTime($dealData["ufCrm_1709801802210"] ?? null);
-        // } else {
-        //     throw new Exception("Not found data for the deal: {$dealId}", 404);
-        // }
+        if (!empty($trainingsData)) {
+            foreach ($trainingsData as $training) {
+                $datetimeTraining = (!empty($training['ufCrm22_1709804621873'])) ? new DateTime($training['ufCrm22_1709804621873']) : null;
 
-        return $trainingsData;
+                $dto = new TrainingDTO();
+                $dto
+                    ->setId($training['id'] ?? null)
+                    ->setTitle($training['title'] ?? null)
+                    ->setCategoryId(intval($training['categoryId'] ?? null))
+                    ->setStageId($training['stageId'] ?? null)
+                    ->setDealId($training['parentId2'] ?? null)
+                    ->setEventId($training['ufCrm22EventId'] ?? null)
+                    ->setAssignedById($training['assignedById'] ?? null)
+                    ->setDatetimeTraining($datetimeTraining)
+                    ->setWhoIsClosed($training['ufCrm22_1709810191984'] ?? null);
+
+
+                if ($dto->getId() !== null) {
+                    $trainingsDTO[] = $dto;
+                }
+            }
+        }
+
+        return $trainingsDTO;
     }
 }

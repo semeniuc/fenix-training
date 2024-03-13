@@ -5,8 +5,9 @@ namespace Beupsoft\Fenix\App\DTO;
 class DealDTO 
 {
     private ?int $id;
-    private ?int $pipeline;
-    private ?string $stage;
+    private ?int $categoryId;
+    private ?string $stageId;
+    private ?int $assignedById;
     private ?array $days;
     private ?string $time;
 
@@ -31,41 +32,61 @@ class DealDTO
     }
 
     /**
-     * Get the value of pipeline
+     * Get the value of categoryId
      */ 
-    public function getPipeline()
+    public function getCategoryId()
     {
-        return $this->pipeline;
+        return $this->categoryId;
     }
 
     /**
-     * Set the value of pipeline
+     * Set the value of categoryId
      *
      * @return  self
      */ 
-    public function setPipeline(?int $pipeline)
+    public function setCategoryId(?int $categoryId)
     {
-        $this->pipeline = $pipeline;
+        $this->categoryId = $categoryId;
 
         return $this;
     }
 
     /**
-     * Get the value of stage
+     * Get the value of stageId
      */ 
-    public function getStage()
+    public function getStageId()
     {
-        return $this->stage;
+        return $this->stageId;
     }
 
     /**
-     * Set the value of stage
+     * Set the value of stageId
      *
      * @return  self
      */ 
-    public function setStage(?string $stage)
+    public function setStageId(?string $stageId)
     {
-        $this->stage = $stage;
+        $this->stageId = $stageId;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of assignedById
+     */ 
+    public function getAssignedById()
+    {
+        return $this->assignedById;
+    }
+
+    /**
+     * Set the value of assignedById
+     *
+     * @return  self
+     */ 
+    public function setAssignedById(?int $assignedById)
+    {
+        $this->assignedById = $assignedById;
 
         return $this;
     }

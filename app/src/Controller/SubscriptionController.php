@@ -57,29 +57,29 @@ class SubscriptionController
         return $repository->findByDealId($dealId);
     }
 
-    private function routeDeal(DealDTO $deal): void
-    {
-        if($deal->getPipeline() == 6) {
-            switch ($deal->getStage()) {
-                case 'C6:PREPARATION':
-                    # create trainings
-                    break;
-                case 'C6:PREPAYMENT_INVOICE':
-                    # update trainings
-                    break;
-                default:
-                    # skip
-                    break;
-            }
-        }
-    }
+    // private function routeDeal(DealDTO $deal): void
+    // {
+    //     if($deal->getPipeline() == 6) {
+    //         switch ($deal->getStage()) {
+    //             case 'C6:PREPARATION':
+    //                 # create trainings
+    //                 break;
+    //             case 'C6:PREPAYMENT_INVOICE':
+    //                 # update trainings
+    //                 break;
+    //             default:
+    //                 # skip
+    //                 break;
+    //         }
+    //     }
+    // }
 
     private function createTrainings(DealDTO $deal): void
     {
         $repository = new TrainingRepository();
         $trainingsData = $repository->findTrainingsByDealId($deal->getId());
 
-        // Logging::save($trainingsData, "trainingsData", "listener");
+        Logging::save($trainingsData, "trainingsData", "listener");
         dd($trainingsData);
     }
 }
