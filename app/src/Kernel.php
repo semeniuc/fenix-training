@@ -12,7 +12,7 @@ class Kernel
     {
         $route = $this->extract($requestUri);
         
-        if ($route["/favicon.ico"]) {
+        if ($route === "/favicon.ico") {
             exit;
         }
 
