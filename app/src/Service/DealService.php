@@ -68,16 +68,37 @@ class DealService
     {
         $data = [];
 
+        // Determine the date of the first training
+        $firstDay = min(array_column($daysAndTime, 'day'));
+        $firstTrainingDate = clone $startDate;
+        $firstTrainingDate->modify("next Monday");
+
+        $currentDate = new \DateTime();
+        while (
+            $firstTrainingDate->format("N") != $firstDay
+            && $firstTrainingDate < $startDate
+            && $firstTrainingDate < $currentDate
+        ) {
+            $firstTrainingDate->modify("+1 day");
+        }
+
+        // Get dates
         $count = 0;
         $weekOffset = 0;
         while ($count < $numberTrainings) {
             foreach ($daysAndTime as $key => $value) {
                 $dayOfWeek = $value['day'];
-                $time = $value['time'];
 
-                $trainingDate = clone $startDate;
+                // Set date
+                $trainingDate = clone $firstTrainingDate;
                 $trainingDate->modify("+" . ($weekOffset * 7 + $dayOfWeek - 1) . " days");
 
+                // Set time
+                $time = $value['time'];
+                $timeParts = explode(':', $time);
+                $trainingDate->setTime((int)$timeParts[0], (int)$timeParts[1]);
+
+                // Save
                 $data[] = $trainingDate;
 
                 $count++;
