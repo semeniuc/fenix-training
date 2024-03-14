@@ -26,20 +26,14 @@ class TrainingService
             $this->deleteEventCalendarFromTraining($eventId);
         }
 
-        switch ($eventType) {
-            case 'del':
-                # skip
-                break;
-            default:
-                if ($trainingDTO->getStageId() !== "DT149_30:FAIL") {
-                    # Create event
-                    $eventCalendarDTO = $this->createEventCalendarForTraining($trainingDTO);
+        if ($trainingDTO->getStageId() !== "DT149_30:FAIL") {
+            # Create event
+            $eventCalendarDTO = $this->createEventCalendarForTraining($trainingDTO);
 
-                    # Save event
-                    if ($eventId = $eventCalendarDTO->getId()) {
-                        $this->addEventCalendarToTraining($trainingId, $eventId);
-                    }
-                }
+            # Save event
+            if ($eventId = $eventCalendarDTO->getId()) {
+                $this->addEventCalendarToTraining($trainingId, $eventId);
+            }
         }
     }
 

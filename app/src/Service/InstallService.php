@@ -39,7 +39,6 @@ class InstallService
             "OnCalendarEntryDelete",
             "onCrmDynamicItemAdd_" . $trainingEnityTypeId,
             "onCrmDynamicItemUpdate_" . $trainingEnityTypeId,
-            "onCrmDynamicItemDelete_" . $trainingEnityTypeId,
         ];
 
         $data = [];
@@ -56,17 +55,17 @@ class InstallService
 
         # TODO: После тестирования включить подписку на оффлайн события
 
-        // $handler = $_ENV["APP_PUBLIC_URL"] . "listener";
-        // $data["onOfflineEvent"] = [
-        //     "method" => "event.bind",
-        //     "params" => [
-        //         "event" => "ONOFFLINEEVENT",
-        //         "handler" => $handler,
-        //         'options' => [
-        //             'minTimeout' => 5,
-        //         ],
-        //     ],
-        // ];
+        $handler = $_ENV["APP_PUBLIC_URL"] . "listener";
+        $data["onOfflineEvent"] = [
+            "method" => "event.bind",
+            "params" => [
+                "event" => "ONOFFLINEEVENT",
+                "handler" => $handler,
+                'options' => [
+                    'minTimeout' => 5,
+                ],
+            ],
+        ];
 
         return Bitrix::callBatch($data);
     }

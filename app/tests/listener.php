@@ -59,17 +59,7 @@ try {
 
     function getListeners()
     {
-        return Bitrix::call("event.get");$handler = $_ENV["APP_PUBLIC_URL"] . "listener";
-        // $data["onOfflineEvent"] = [
-        //     "method" => "event.bind",
-        //     "params" => [
-        //         "event" => "ONOFFLINEEVENT",
-        //         "handler" => $handler,
-        //         'options' => [
-        //             'minTimeout' => 5,
-        //         ],
-        //     ],
-        // ];
+        return Bitrix::call("event.get");
     }
 
     function getEvents(): array
@@ -77,8 +67,8 @@ try {
         return Bitrix::call("event.offline.get")["events"] ?? [];
     }
 
-    // $response = deleteListeners();
-    // $response = deleteHandlerListener();
+//     $response = deleteListeners();
+//     $response = deleteHandlerListener();
     $response = getListeners();
     // $response = getEvents();
 
