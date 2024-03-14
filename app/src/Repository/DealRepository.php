@@ -15,14 +15,14 @@ class DealRepository
             "id" => $dealId,
         ])["result"]["item"];
 
-        $daysAndTime = $this->getDaysAndTime($dealData);
-        $data["daysAndTime"] = $daysAndTime;
-
         if ($dealData) {
             foreach (DealConfig::getFields() as $key => $field) {
                 $data[$key] = $dealData[$field] ?? null;
             }
         }
+
+        $data["daysAndTime"] = $this->getDaysAndTime($dealData);
+        $data["numberTrainings"] = $this->getNumberTrainings($dealData);
 
         return new DealDTO($data);
     }
@@ -64,6 +64,26 @@ class DealRepository
         }
 
         return $response;
+    }
+
+    private function getNumberTrainings(array $dealData): ?int
+    {
+        $descValues = $this->geDescValues();
+        $dealConfig = DealConfig::getFields();
+
+        if ($descValues && $dealConfig) {
+            // Get number of trainings
+            $numberId = $dealData[$dealConfig["numberTrainings"]];
+            $numberTrainingValues = $descValues[$dealConfig["numberTrainings"]]["items"];
+
+            foreach ($numberTrainingValues as $item) {
+                if ($item["ID"] == $numberId) {
+                    return $item["VALUE"];
+                }
+            }
+        }
+
+        return null;
     }
 
     private function geDescValues(): array

@@ -12,6 +12,9 @@ class DealDTO
     private ?int $assignedById;
     private ?array $daysAndTime;
     private ?DateTime $startDate;
+    private ?int $numberTrainings;
+    private ?DateTime $startDatePause;
+    private ?DateTime $endDatePause;
 
     public function __construct(array $data)
     {
@@ -21,6 +24,9 @@ class DealDTO
         $this->assignedById = $data["assignedById"];
         $this->daysAndTime = $data["daysAndTime"];
         $this->startDate = (!empty($data['startDate'])) ? new DateTime($data['startDate']) : null;
+        $this->numberTrainings = $data["numberTrainings"];
+        $this->startDatePause = (!empty($data['startDatePause'])) ? new DateTime($data['startDatePause']) : null;
+        $this->endDatePause = (!empty($data['endDatePause'])) ? new DateTime($data['endDatePause']) : null;
     }
 
     /**
@@ -69,5 +75,29 @@ class DealDTO
     public function getStartDate(): ?DateTime
     {
         return $this->startDate;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getNumberTrainings(): ?int
+    {
+        return $this->numberTrainings;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getStartDatePause(): ?DateTime
+    {
+        return $this->startDatePause;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getEndDatePause(): ?DateTime
+    {
+        return $this->endDatePause;
     }
 }

@@ -15,6 +15,9 @@ class DealConfig extends Environment
                 "days" => "ufCrm_1709801608762",
                 "time" => "ufCrm_1709801802210",
                 "startDate" => "ufCrm_1709802486280",
+                "numberTrainings" => "ufCrm_1705395448677",
+                "startDatePause" => "ufCrm_1709802590412",
+                "endDatePause" => "ufCrm_1709802612328",
             ],
         ],
         "prod" => [
@@ -27,6 +30,9 @@ class DealConfig extends Environment
                 "days" => "ufCrm_1709801608762",
                 "time" => "ufCrm_1709801802210",
                 "startDate" => "ufCrm_1709802486280",
+                "numberTrainings" => "ufCrm_1705395448677",
+                "startDatePause" => "ufCrm_1709802590412",
+                "endDatePause" => "ufCrm_1709802612328",
             ],
         ],
     ];
