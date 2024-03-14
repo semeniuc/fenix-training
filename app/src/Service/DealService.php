@@ -31,7 +31,8 @@ class DealService
         if($categoryId == 6) {
 
 //            $trainings = $this->getTrainingsByDeal($dealDTO);
-            dd($dealDTO);
+//            dd($dealDTO);
+            $this->createTrainings($dealDTO);
 
 //            switch ($stageId) {
 //                case 'C6:PREPARATION': // Init
@@ -52,12 +53,41 @@ class DealService
         return $this->dealRepository->get($dealId);
     } 
 
-    private function getTrainingsByDeal(DealDTO $deal): array
+    private function getTrainingsByDeal(int $dealId): array
     {
-        return $this->trainingRepository->findByDealId($deal->getId());
+        return $this->trainingRepository->findByDealId($dealId);
     }
 
-    private function createTrainings() {
+    private function createTrainings(DealDTO $dealDTO)
+    {
+        $trainingSchedule = $this->getTrainingSchedule($dealDTO->getStartDate(), $dealDTO->getDaysAndTime(), $dealDTO->getNumberTrainings());
+        dd($trainingSchedule);
+    }
 
+    private function getTrainingSchedule(\DateTime $startDate, array $daysAndTime, int $numberTrainings): array
+    {
+        $data = [];
+
+        $count = 0;
+        $weekOffset = 0;
+        while ($count < $numberTrainings) {
+            foreach ($daysAndTime as $key => $value) {
+                $dayOfWeek = $value['day'];
+                $time = $value['time'];
+
+                $trainingDate = clone $startDate;
+                $trainingDate->modify("+" . ($weekOffset * 7 + $dayOfWeek - 1) . " days");
+
+                $data[] = $trainingDate;
+
+                $count++;
+                if ($count >= $numberTrainings) {
+                    break;
+                }
+            }
+            $weekOffset++;
+        }
+
+        return $data;
     }
 }
