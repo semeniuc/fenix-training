@@ -7,26 +7,26 @@ use DateTime;
 class TrainingDTO 
 {
     private ?int $id;
-    private ?string $title; // title
-    private ?int $categoryId; // categoryId
-    private ?string $stageId; // stageId
-    private ?int $dealId; // parentId2
-    private ?int $eventId; // ufCrm22EventId
-    private ?int $assignedById; // assignedById
-    private ?DateTime $datetimeTraining; // ufCrm22_1709804621873
-    private ?int $whoIsClosed; // ufCrm22_1709810191984
+    private ?string $title;
+    private ?int $categoryId;
+    private ?string $stageId;
+    private ?int $dealId;
+    private ?int $eventId;
+    private ?int $assignedById;
+    private ?DateTime $datetimeTraining;
+    private ?int $whoIsClosed;
 
     public function __construct(array $data) 
     {
-        $this->id = $data["id"] ?? null;
-        $this->title = $data["title"] ?? null;
-        $this->categoryId = $data["categoryId"] ?? null;
-        $this->stageId = $data["stageId"] ?? null;
-        $this->dealId = $data["parentId2"] ?? null;
-        $this->eventId = $data["ufCrm22EventId"] ?? null;
-        $this->assignedById = $data["assignedById"] ?? null;
-        $this->datetimeTraining = (!empty($data['ufCrm22_1709804621873'])) ? new DateTime($data['ufCrm22_1709804621873']) : null;
-        $this->whoIsClosed = $data["ufCrm22_1709810191984"] ?? null;
+        $this->id = $data["id"];
+        $this->title = $data["title"];
+        $this->categoryId = $data["categoryId"];
+        $this->stageId = $data["stageId"];
+        $this->dealId = $data["dealId"];
+        $this->eventId = $data["eventId"];
+        $this->assignedById = $data["assignedById"];
+        $this->datetimeTraining = (!empty($data['datetimeTraining'])) ? new DateTime($data['datetimeTraining']) : null;
+        $this->whoIsClosed = $data["whoIsClosed"];
     }
 
     /**

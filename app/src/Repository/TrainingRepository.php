@@ -2,15 +2,13 @@
 
 namespace Beupsoft\Fenix\App\Repository;
 
-use Exception;
-use DateTime;
 use Beupsoft\Fenix\App\Bitrix;
+use Beupsoft\App\Config\TrainingConfig;
 use Beupsoft\Fenix\App\DTO\TrainingDTO;
 
-# TODO: Настроить получение проверяемых полей и значений из конфига
 class TrainingRepository
 {
-    public function add(object $dto) 
+    public function add(array $data)
     {
 
     }
@@ -18,17 +16,24 @@ class TrainingRepository
     public function get(int $trainingId): TrainingDTO
     {
         $trainingData = Bitrix::call("crm.item.get", [
-            "entityTypeId" => 149,
+            "entityTypeId" => TrainingConfig::getEntityTypeId(),
             "id" => $trainingId,
         ])["result"]["item"];
 
-        return new TrainingDTO($trainingData);
+        $data = [];
+        if ($trainingData) {
+            foreach (TrainingConfig::getFields() as $key => $field) {
+                $data[$key] = $trainingData[$field] ?? null;
+            }
+        }
+
+        return new TrainingDTO($data);
     }
 
     public function upd(int $trainingId, array $data): bool 
     {
         $trainingData = Bitrix::call("crm.item.update", [
-            "entityTypeId" => 149,
+            "entityTypeId" => TrainingConfig::getEntityTypeId(),
             "id" => $trainingId,
             "fields" => $data,
         ])["result"]["item"] ?? null;
@@ -41,17 +46,23 @@ class TrainingRepository
         $trainingsDTO = [];
 
         $trainingsData = Bitrix::call("crm.item.list", [
-            "entityTypeId" => 149,
+            "entityTypeId" => TrainingConfig::getEntityTypeId(),
             "filter" => [
                 "parentId2" => $dealId
             ], 
         ])["result"]["items"];
 
         if (!empty($trainingsData)) {
-            foreach ($trainingsData as $training) {
-                $datetimeTraining = (!empty($training['ufCrm22_1709804621873'])) ? new DateTime($training['ufCrm22_1709804621873']) : null;
+            foreach ($trainingsData as $trainingData) {
 
-                $dto = new TrainingDTO($training);
+                $data = [];
+                if ($trainingData) {
+                    foreach (TrainingConfig::getFields() as $key => $field) {
+                        $data[$key] = $trainingData[$field] ?? null;
+                    }
+                }
+
+                $dto = new TrainingDTO($data);
                 
                 if ($dto->getId() !== null) {
                     $trainingsDTO[] = $dto;
