@@ -9,8 +9,16 @@ use Beupsoft\Fenix\App\Repository\TrainingRepository;
 
 class DealService
 {
+    private DealRepository $dealRepository;
+    private TrainingRepository $trainingRepository;
+    private EventCalendarService $eventCalendar;
+
+    # TODO: Использовать кофиг вместо явных значений
     public function __construct()
     {
+        $this->dealRepository = new DealRepository();
+        $this->trainingRepository = new TrainingRepository();
+        $this->eventCalendar = new EventCalendarService();
     }
 
     public function handle(int $dealId): void
@@ -21,32 +29,35 @@ class DealService
         $stageId = $dealDTO->getStageId();
 
         if($categoryId == 6) {
-            switch ($stageId) {
-                case 'C6:PREPARATION': // Init
-                    # code...
-                    break;
-                case 'C6:PREPAYMENT_INVOICE': // Pause
-                    dd($dealDTO);
-                    break;
-                default:
-                    # code...
-                    break;
-            }
+
+//            $trainings = $this->getTrainingsByDeal($dealDTO);
+            dd($dealDTO);
+
+//            switch ($stageId) {
+//                case 'C6:PREPARATION': // Init
+//                    # code...
+//                    break;
+//                case 'C6:PREPAYMENT_INVOICE': // Pause
+//
+//                    break;
+//                default:
+//                    # code...
+//                    break;
+//            }
         }
     }
 
     public function getDeal(int $dealId): DealDTO
     {
-        $repository = new DealRepository();
-        $deal = $repository->get($dealId);
-        return $deal;
+        return $this->dealRepository->get($dealId);
     } 
 
     private function getTrainingsByDeal(DealDTO $deal): array
     {
-        $repository = new TrainingRepository();
-        $trainingsDTO = $repository->findByDealId($deal->getId());
+        return $this->trainingRepository->findByDealId($deal->getId());
+    }
 
-        return $trainingsDTO;
+    private function createTrainings() {
+
     }
 }

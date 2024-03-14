@@ -11,6 +11,7 @@ class TrainingService
     private TrainingRepository $trainingRepository;
     private EventCalendarService $eventCalendar;
 
+    # TODO: Использовать кофиг вместо явных значений
     public function __construct()
     {
         $this->trainingRepository = new TrainingRepository();
