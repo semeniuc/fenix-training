@@ -30,10 +30,12 @@ class Kernel
             "/test/listener" => $this->test("listener"),
             "/test/events" => $this->test("events"),
 
+            "/request/deal" => $this->request("deal"),
             "/request/training" => $this->request("training"),
             "/request/sections" => $this->request("sections"),
             "/request/event" => $this->request("event"),
             "/request/accessibility" => $this->request("accessibility"),
+            "/request/enum" => $this->request("enum"),
 
             default => throw new \Exception(message: "Controller $route not found", code: 404),
         };

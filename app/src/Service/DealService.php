@@ -26,7 +26,7 @@ class DealService
                     # code...
                     break;
                 case 'C6:PREPAYMENT_INVOICE': // Pause
-                    # code...
+                    dd($dealDTO);
                     break;
                 default:
                     # code...
@@ -35,7 +35,7 @@ class DealService
         }
     }
 
-    private function getDeal(int $dealId): DealDTO
+    public function getDeal(int $dealId): DealDTO
     {
         $repository = new DealRepository();
         $deal = $repository->get($dealId);

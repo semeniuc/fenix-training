@@ -7,11 +7,10 @@ use DateTime;
 class DealDTO 
 {
     private ?int $id;
-    private ?int $categoryId; // categoryId
-    private ?string $stageId; // stageId
-    private ?int $assignedById; // assignedById
-    private ?array $days; // ufCrm_1709801608762
-    private ?int $time; // ufCrm_1709801802210
+    private ?int $categoryId;
+    private ?string $stageId;
+    private ?int $assignedById;
+    private ?array $daysAndTime;
 
     public function __construct(array $data)
     {
@@ -19,56 +18,46 @@ class DealDTO
         $this->categoryId = $data["categoryId"] ?? null;
         $this->stageId = $data["stageId"] ?? null;
         $this->assignedById = $data["assignedById"] ?? null;
-        $this->days = $data["ufCrm_1709801608762"] ?? null;
-        $this->time = $data["ufCrm_1709801802210"] ?? null;
+        $this->daysAndTime = $data["daysAndTime"] ?? null;
     }
-  
 
     /**
-     * Get the value of id
-     */ 
-    public function getId()
+     * @return int|null
+     */
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * Get the value of categoryId
-     */ 
-    public function getCategoryId()
+     * @return int|null
+     */
+    public function getCategoryId(): ?int
     {
         return $this->categoryId;
     }
 
     /**
-     * Get the value of stageId
-     */ 
-    public function getStageId()
+     * @return string|null
+     */
+    public function getStageId(): ?string
     {
         return $this->stageId;
     }
 
     /**
-     * Get the value of assignedById
-     */ 
-    public function getAssignedById()
+     * @return int|null
+     */
+    public function getAssignedById(): ?int
     {
         return $this->assignedById;
     }
 
     /**
-     * Get the value of days
-     */ 
-    public function getDays()
+     * @return array|null
+     */
+    public function getDaysAndTime(): ?array
     {
-        return $this->days;
-    }
-
-    /**
-     * Get the value of time
-     */ 
-    public function getTime()
-    {
-        return $this->time;
+        return $this->daysAndTime;
     }
 }

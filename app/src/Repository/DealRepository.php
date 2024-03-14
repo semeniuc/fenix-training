@@ -2,20 +2,73 @@
 
 namespace Beupsoft\Fenix\App\Repository;
 
-use Exception;
 use Beupsoft\Fenix\App\Bitrix;
+use Beupsoft\App\Config\DealConfig;
 use Beupsoft\Fenix\App\DTO\DealDTO;
 
-# TODO: Настроить получение проверяемых полей и значений из конфига
 class DealRepository
 {
     public function get(int $dealId): DealDTO
     {
         $dealData = Bitrix::call("crm.item.get", [
-            "entityTypeId" => 2,
+            "entityTypeId" => DealConfig::getEntityTypeId(),
             "id" => $dealId,
         ])["result"]["item"];
 
-        return new DealDTO($dealData);
+        $daysAndTime = $this->getDaysAndTime($dealData);
+
+        return new DealDTO([
+            "id" => $dealData["id"] ?? null,
+            "categoryId" => $dealData["categoryId"] ?? null,
+            "stageId" => $dealData["stageId"] ?? null,
+            "assignedById" => $dealData["assignedById"] ?? null,
+            "daysAndTime" => $daysAndTime,
+        ]);
+    }
+
+    private function getDaysAndTime(array $dealData): array
+    {
+        $response = [];
+
+        $descValues = $this->geDescValues();
+        $dealConfig = DealConfig::getFields();
+        $listDays = DealConfig::getListDays();
+
+
+        if ($descValues && $dealConfig) {
+            // Get time
+            $timeId = $dealData[$dealConfig["time"]];
+            $timeValues = $descValues[$dealConfig["time"]]["items"];
+            $time = "";
+
+            foreach ($timeValues as $item) {
+                if ($item["ID"] == $timeId) {
+                    $time = $item["VALUE"];
+                    break;
+                }
+            }
+
+            // Get days
+            $daysIds = $dealData[$dealConfig["days"]];
+            $daysValues = $descValues[$dealConfig["days"]]["items"];
+
+            foreach ($daysValues as $item) {
+                if (in_array($item["ID"], $daysIds)) {
+                    $response[$item["ID"]] = [
+                        "day" => $listDays[$item["VALUE"]],
+                        "time" => $time,
+                    ];
+                }
+            }
+        }
+
+        return $response;
+    }
+
+    private function geDescValues(): array
+    {
+        return Bitrix::call("crm.item.fields", [
+            "entityTypeId" => DealConfig::getEntityTypeId(),
+        ])["result"]["fields"];
     }
 }
