@@ -14,6 +14,7 @@ class DealConfig extends Environment
                 "assignedById" => "assignedById",
                 "days" => "ufCrm_1709801608762",
                 "time" => "ufCrm_1709801802210",
+                "startDate" => "ufCrm_1709802486280",
             ],
         ],
         "prod" => [
@@ -25,6 +26,7 @@ class DealConfig extends Environment
                 "assignedById" => "assignedById",
                 "days" => "ufCrm_1709801608762",
                 "time" => "ufCrm_1709801802210",
+                "startDate" => "ufCrm_1709802486280",
             ],
         ],
     ];

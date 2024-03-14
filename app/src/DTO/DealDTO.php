@@ -11,14 +11,16 @@ class DealDTO
     private ?string $stageId;
     private ?int $assignedById;
     private ?array $daysAndTime;
+    private ?DateTime $startDate;
 
     public function __construct(array $data)
     {
-        $this->id = $data["id"] ?? null;
-        $this->categoryId = $data["categoryId"] ?? null;
-        $this->stageId = $data["stageId"] ?? null;
-        $this->assignedById = $data["assignedById"] ?? null;
-        $this->daysAndTime = $data["daysAndTime"] ?? null;
+        $this->id = $data["id"];
+        $this->categoryId = $data["categoryId"];
+        $this->stageId = $data["stageId"];
+        $this->assignedById = $data["assignedById"];
+        $this->daysAndTime = $data["daysAndTime"];
+        $this->startDate = (!empty($data['startDate'])) ? new DateTime($data['startDate']) : null;
     }
 
     /**
@@ -59,5 +61,13 @@ class DealDTO
     public function getDaysAndTime(): ?array
     {
         return $this->daysAndTime;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getStartDate(): ?DateTime
+    {
+        return $this->startDate;
     }
 }

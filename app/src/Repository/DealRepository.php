@@ -16,14 +16,15 @@ class DealRepository
         ])["result"]["item"];
 
         $daysAndTime = $this->getDaysAndTime($dealData);
+        $data["daysAndTime"] = $daysAndTime;
 
-        return new DealDTO([
-            "id" => $dealData["id"] ?? null,
-            "categoryId" => $dealData["categoryId"] ?? null,
-            "stageId" => $dealData["stageId"] ?? null,
-            "assignedById" => $dealData["assignedById"] ?? null,
-            "daysAndTime" => $daysAndTime,
-        ]);
+        if ($dealData) {
+            foreach (DealConfig::getFields() as $key => $field) {
+                $data[$key] = $dealData[$field] ?? null;
+            }
+        }
+
+        return new DealDTO($data);
     }
 
     private function getDaysAndTime(array $dealData): array
