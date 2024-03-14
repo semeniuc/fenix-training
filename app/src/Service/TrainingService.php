@@ -18,7 +18,7 @@ class TrainingService
         $this->eventCalendar = new EventCalendarService();
     }
 
-    public function handle(int $trainingId, string $eventType): void
+    public function handle(int $trainingId): void
     {
         $trainingDTO = $this->getTraining($trainingId);
         # Delete old event
@@ -52,9 +52,6 @@ class TrainingService
         $to = ($datetime) ? $datetime->modify("+1 hour")->format("Y-m-d H:i:s") : null;
 
         return $this->eventCalendar->createEventCalendar([
-            "type" => "user",
-            "ownerId" => 572,
-            "section" => 132,
             "accessibility" => "busy",
             "from" => $from,
             "to" => $to,

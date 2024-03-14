@@ -13,7 +13,7 @@ class DealService
     {
     }
 
-    public function handle(int $dealId, string $eventType): void
+    public function handle(int $dealId): void
     {
         $dealDTO = $this->getDeal($dealId);
 

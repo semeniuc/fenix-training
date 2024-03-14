@@ -17,7 +17,6 @@ try {
     //     "type" => "user",
     //     "ownerId" => 572,
     //     "section" => 132,
-
     //     "accessibility" => "busy", 
     //     "from" => "2024-03-13 18:15:00",
     //     "to" => "2024-03-13 19:15:00",
@@ -36,18 +35,15 @@ try {
     //     "ownerId" => 572,
     // ])["result"];
 
+    $config = \Beupsoft\App\Config\EventCalendarConfig::getOwnerCalendar();
 
     $eventCalendarService = new EventCalendarService();
     // $response = $eventCalendarService->deleteEventCalendar($eventId);
 
-    $response = $eventCalendarService->createEventCalendar([
-        "type" => "user",
-        "ownerId" => 572,
-        "section" => 132,
-
+    $data = array_merge($config, [
         "accessibility" => "busy",
-        "from" => "2024-03-13 18:15:00",
-        "to" => "2024-03-13 19:15:00",
+        "from" => "2024-03-15 18:15:00",
+        "to" => "2024-03-15 19:15:00",
         "name" => "My test",
         "description" => "<b><a href=\"https://fenixtraining.bitrix24.pl/page/trenerzy/treningi/type/149/details/4/\">EDYTUJ TRENING</a></b>",
         "is_meeting" => "Y",
@@ -56,6 +52,10 @@ try {
         "color" => "#9cbe1c",
         "text_color" => "#283033",
     ]);
+
+    dd($data);
+
+    $response = $eventCalendarService->createEventCalendar($data);
 
 } catch (Throwable $th) {
     $response = [

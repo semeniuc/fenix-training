@@ -6,7 +6,7 @@ try {
 
     $response = Bitrix::call("calendar.section.get", [
         "type" => "user",
-        "ownerId" => 572,
+        "ownerId" => 1,
     ]) ?? [];
 
 } catch (Throwable $th) {

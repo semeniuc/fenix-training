@@ -2,14 +2,18 @@
 
 namespace Beupsoft\Fenix\App\Repository;
 
-use Exception;
+use Beupsoft\App\Config\EventCalendarConfig;
 use Beupsoft\Fenix\App\Bitrix;
 use Beupsoft\Fenix\App\DTO\EventCalendarDTO;
-use DateTime;
 
-# TODO: Настроить получение проверяемых полей и значений из конфига
 class EventCalendarRepository
 {
+    private array $ownerCalendar;
+    public function __construct()
+    {
+        $this->ownerCalendar = EventCalendarConfig::getOwnerCalendar();
+    }
+
     public function get(int $eventId): EventCalendarDTO
     {
         $data = Bitrix::call("calendar.event.getbyid", ["id" => $eventId])["result"];
@@ -36,12 +40,9 @@ class EventCalendarRepository
     public function add(array $data): EventCalendarDTO
     {
         $eventCalendarDTO = new EventCalendarDTO($data);
-        
-        $eventId = Bitrix::call("calendar.event.add", [
-            "type" => $eventCalendarDTO->getType(),
-            "ownerId" => $eventCalendarDTO->getOwnerId(),
-            "section" => $eventCalendarDTO->getSection(),
-            "accessibility" => $eventCalendarDTO->getAccessibility(), 
+
+        $postData = array_merge($this->ownerCalendar, [
+            "accessibility" => $eventCalendarDTO->getAccessibility(),
             "from" => ($eventCalendarDTO->getFrom()) ? $eventCalendarDTO->getFrom()->format("Y-m-d H:i:s") : null,
             "to" => ($eventCalendarDTO->getTo()) ? $eventCalendarDTO->getTo()->format("Y-m-d H:i:s") : null,
             "name" => $eventCalendarDTO->getName(),
@@ -51,8 +52,9 @@ class EventCalendarRepository
             "attendees" => $eventCalendarDTO->getAttendees(),
             "color" => $eventCalendarDTO->getColor(),
             "text_color" => $eventCalendarDTO->getTextColor(),
-        ])["result"];
+        ]);
 
+        $eventId = Bitrix::call("calendar.event.add", $postData)["result"];
         $eventCalendarDTO->setId($eventId);
 
         return $eventCalendarDTO;

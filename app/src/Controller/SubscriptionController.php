@@ -15,16 +15,13 @@ class SubscriptionController
             foreach ($events as $event) {
                 switch ($event["EVENT_NAME"]) {
                     case "ONCRMDEALUPDATE":
-                        (new DealService())->handle($event["EVENT_DATA"]["FIELDS"]["ID"], "upd");
+                        (new DealService())->handle($event["EVENT_DATA"]["FIELDS"]["ID"]);
                         break;
                     case "ONCRMDYNAMICITEMADD_149":
-                        (new TrainingService())->handle($event["EVENT_DATA"]["FIELDS"]["ID"], "add");
+                        (new TrainingService())->handle($event["EVENT_DATA"]["FIELDS"]["ID"]);
                         break;
                     case "ONCRMDYNAMICITEMUPDATE_149":
-                        (new TrainingService())->handle($event["EVENT_DATA"]["FIELDS"]["ID"], "upd");
-                        break;
-                    case "ONCRMDYNAMICITEMDELETE_149":
-                        (new TrainingService())->handle($event["EVENT_DATA"]["FIELDS"]["ID"], "del");
+                        (new TrainingService())->handle($event["EVENT_DATA"]["FIELDS"]["ID"]);
                         break;
                     case "ONCALENDARENTRYUPDATE":
                         # code...
