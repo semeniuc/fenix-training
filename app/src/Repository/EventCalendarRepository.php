@@ -5,6 +5,7 @@ namespace Beupsoft\Fenix\App\Repository;
 use Beupsoft\App\Config\EventCalendarConfig;
 use Beupsoft\Fenix\App\Bitrix;
 use Beupsoft\Fenix\App\DTO\EventCalendarDTO;
+use DateTime;
 
 class EventCalendarRepository
 {
@@ -69,5 +70,17 @@ class EventCalendarRepository
             "type" => $eventCalendarDTO->getType(),
             "ownerId" => $eventCalendarDTO->getOwnerId(),
         ])["result"] ?? false;
+    }
+
+    public function isTimeAvailable(int $userId, DateTime $from, DateTime $to): bool
+    {
+        $response = Bitrix::call("calendar.accessibility.get", [
+            "users" => [$userId],
+            "from" => $from->format("Y-m-d H:i:s"),
+            "to" => $to->format("Y-m-d H:i:s"),
+
+        ])["result"][$userId] ?? [];
+
+        return empty($response);
     }
 }

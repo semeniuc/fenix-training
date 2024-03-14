@@ -2,7 +2,6 @@
 
 namespace Beupsoft\Fenix\App\Service;
 
-use Exception;
 use Beupsoft\Fenix\App\DTO\EventCalendarDTO;
 use Beupsoft\Fenix\App\Repository\EventCalendarRepository;
 
@@ -23,5 +22,10 @@ class EventCalendarService
     public function deleteEventCalendar(int $eventId): bool
     {
         return $this->eventCalendarRepository->del($eventId);
+    }
+
+    public function isTimeAvailable(int $userId, \DateTime $from, \DateTime $to): bool
+    {
+        return $this->eventCalendarRepository->isTimeAvailable($userId, $from, $to);
     }
 }

@@ -6,8 +6,8 @@ try {
     $trainingId = 10;
 
     $training = new TrainingService();
-    // $response = $training->getTraining($trainingId);
-    $response = $training->handle($trainingId);
+     $response = $training->getTraining($trainingId);
+//    $response = $training->handle($trainingId);
 
 } catch (Throwable $th) {
     $response = [

@@ -31,9 +31,9 @@ class TrainingRepository
             "entityTypeId" => 149,
             "id" => $trainingId,
             "fields" => $data,
-        ])["result"]["item"];
+        ])["result"]["item"] ?? null;
 
-        return ($trainingData) ? true : false;
+        return (!empty($trainingData));
     }
 
     public function findByDealId(int $dealId): array
