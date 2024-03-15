@@ -11,14 +11,14 @@ class DealService
 {
     private DealRepository $dealRepository;
     private TrainingRepository $trainingRepository;
-    private EventCalendarService $eventCalendar;
+    private TrainingService $trainingService;
 
     # TODO: Использовать кофиг вместо явных значений
     public function __construct()
     {
         $this->dealRepository = new DealRepository();
         $this->trainingRepository = new TrainingRepository();
-        $this->eventCalendar = new EventCalendarService();
+        $this->trainingService = new TrainingService();
     }
 
     public function handle(int $dealId): void
@@ -64,17 +64,17 @@ class DealService
 
         if ($trainingSchedule) {
             foreach ($trainingSchedule as $date) {
-                $this->trainingRepository->add([
+                $trainingId = $this->trainingRepository->add([
                     "title" => "test",
                     "assignedById" => $dealDTO->getAssignedById(),
                     "ufCrm22_1709804621873" => $date->format("Y-m-d H:i:s"),
                     "parentId2" => $dealDTO->getId(),
                     "contactId" => $dealDTO->getContactId(),
                 ]);
+
+                $this->trainingService->handle($trainingId);
             }
         }
-
-//        dd($trainingSchedule);
     }
 
     private function getTrainingSchedule(\DateTime $startDate, array $daysAndTime, int $numberTrainings): array

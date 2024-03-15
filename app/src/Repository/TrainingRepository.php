@@ -8,14 +8,15 @@ use Beupsoft\Fenix\App\DTO\TrainingDTO;
 
 class TrainingRepository
 {
-    public function add(array $data)
+    public function add(array $data): int
     {
-        $trainingData = Bitrix::call("crm.item.add", [
+        return Bitrix::call("crm.item.add", [
             "entityTypeId" => TrainingConfig::getEntityTypeId(),
-            "fields" => $data
-        ])["result"]["item"];
-
-        dd($trainingData);
+            "fields" => $data,
+            "params" => [
+                "REGISTER_SONET_EVENT" => "Y",
+            ],
+        ])["result"]["item"]["id"];
     }
 
     public function get(int $trainingId): TrainingDTO
