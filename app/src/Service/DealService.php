@@ -29,22 +29,20 @@ class DealService
         $stageId = $dealDTO->getStageId();
 
         if($categoryId == 6) {
-
-//            $trainings = $this->getTrainingsByDeal($dealDTO);
-//            dd($dealDTO);
             $this->createTrainings($dealDTO);
+            switch ($stageId) {
+                case 'C6:PREPARATION': // Init
+                    if (empty($this->getTrainingsByDeal($dealDTO->getId()))) {
+                        $this->createTrainings($dealDTO);
+                    }
+                    break;
+                case 'C6:PREPAYMENT_INVOICE': // Pause
 
-//            switch ($stageId) {
-//                case 'C6:PREPARATION': // Init
-//                    # code...
-//                    break;
-//                case 'C6:PREPAYMENT_INVOICE': // Pause
-//
-//                    break;
-//                default:
-//                    # code...
-//                    break;
-//            }
+                    break;
+                default:
+                    # code...
+                    break;
+            }
         }
     }
 

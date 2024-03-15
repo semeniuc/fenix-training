@@ -12,7 +12,7 @@ final class Bitrix
     const TYPE_TRANSPORT = 'json';  // json or xml
     const DIR_SECRET = '../var/key/bitrix/';
 
-    const IS_SAVE_LOG = true;
+    const IS_SAVE_LOG = false;
     const DIR_LOG = '../var/log/bitrix/';
 
     /**

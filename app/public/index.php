@@ -7,7 +7,7 @@ use Symfony\Component\Dotenv\Dotenv;
 require_once(dirname(__DIR__) . "/vendor/autoload.php");
 try {
     $dotenv = new Dotenv();
-    $dotenv->load("../.env", "../.env.dev");
+    $dotenv->load("../.env");
     new Kernel($_SERVER["REQUEST_URI"]);
 } catch (Exception $e) {
     echo json_encode([
