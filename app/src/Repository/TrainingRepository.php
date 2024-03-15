@@ -10,7 +10,12 @@ class TrainingRepository
 {
     public function add(array $data)
     {
+        $trainingData = Bitrix::call("crm.item.add", [
+            "entityTypeId" => TrainingConfig::getEntityTypeId(),
+            "fields" => $data
+        ])["result"]["item"];
 
+        dd($trainingData);
     }
 
     public function get(int $trainingId): TrainingDTO

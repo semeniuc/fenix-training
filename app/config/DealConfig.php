@@ -18,6 +18,8 @@ class DealConfig extends Environment
                 "numberTrainings" => "ufCrm_1705395448677",
                 "startDatePause" => "ufCrm_1709802590412",
                 "endDatePause" => "ufCrm_1709802612328",
+                "contactId" => "contactId",
+                "title" => "title",
             ],
         ],
         "prod" => [
@@ -33,6 +35,8 @@ class DealConfig extends Environment
                 "numberTrainings" => "ufCrm_1705395448677",
                 "startDatePause" => "ufCrm_1709802590412",
                 "endDatePause" => "ufCrm_1709802612328",
+                "contactId" => "contactId",
+                "title" => "title",
             ],
         ],
     ];

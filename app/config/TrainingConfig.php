@@ -17,6 +17,7 @@ class TrainingConfig extends Environment
                 "assignedById" => "assignedById",
                 "datetimeTraining" => "ufCrm22_1709804621873",
                 "whoIsClosed" => "ufCrm22_1709810191984",
+                "contactId" => "contactId",
             ],
         ],
         "prod" => [
@@ -31,6 +32,7 @@ class TrainingConfig extends Environment
                 "assignedById" => "assignedById",
                 "datetimeTraining" => "ufCrm22_1709804621873",
                 "whoIsClosed" => "ufCrm22_1709810191984",
+                "contactId" => "contactId",
             ],
         ],
     ];

@@ -15,6 +15,8 @@ class DealDTO
     private ?int $numberTrainings;
     private ?DateTime $startDatePause;
     private ?DateTime $endDatePause;
+    private ?string $title;
+    private ?int $contactId;
 
     public function __construct(array $data)
     {
@@ -27,6 +29,8 @@ class DealDTO
         $this->numberTrainings = $data["numberTrainings"];
         $this->startDatePause = (!empty($data['startDatePause'])) ? new DateTime($data['startDatePause']) : null;
         $this->endDatePause = (!empty($data['endDatePause'])) ? new DateTime($data['endDatePause']) : null;
+        $this->title = $data["title"];
+        $this->contactId = $data["contactId"];
     }
 
     /**
@@ -99,5 +103,21 @@ class DealDTO
     public function getEndDatePause(): ?DateTime
     {
         return $this->endDatePause;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getContactId(): ?int
+    {
+        return $this->contactId;
     }
 }

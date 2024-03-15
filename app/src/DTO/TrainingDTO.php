@@ -15,6 +15,7 @@ class TrainingDTO
     private ?int $assignedById;
     private ?DateTime $datetimeTraining;
     private ?int $whoIsClosed;
+    private ?int $contactId;
 
     public function __construct(array $data) 
     {
@@ -27,6 +28,7 @@ class TrainingDTO
         $this->assignedById = $data["assignedById"];
         $this->datetimeTraining = (!empty($data['datetimeTraining'])) ? new DateTime($data['datetimeTraining']) : null;
         $this->whoIsClosed = $data["whoIsClosed"];
+        $this->contactId = $data["contactId"];
     }
 
     /**
@@ -99,5 +101,13 @@ class TrainingDTO
     public function getWhoIsClosed()
     {
         return $this->whoIsClosed;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getContactId(): ?int
+    {
+        return $this->contactId;
     }
 }

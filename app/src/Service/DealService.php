@@ -61,7 +61,20 @@ class DealService
     private function createTrainings(DealDTO $dealDTO)
     {
         $trainingSchedule = $this->getTrainingSchedule($dealDTO->getStartDate(), $dealDTO->getDaysAndTime(), $dealDTO->getNumberTrainings());
-        dd($trainingSchedule);
+
+        if ($trainingSchedule) {
+            foreach ($trainingSchedule as $date) {
+                $this->trainingRepository->add([
+                    "title" => "test",
+                    "assignedById" => $dealDTO->getAssignedById(),
+                    "ufCrm22_1709804621873" => $date->format("Y-m-d H:i:s"),
+                    "parentId2" => $dealDTO->getId(),
+                    "contactId" => $dealDTO->getContactId(),
+                ]);
+            }
+        }
+
+//        dd($trainingSchedule);
     }
 
     private function getTrainingSchedule(\DateTime $startDate, array $daysAndTime, int $numberTrainings): array
