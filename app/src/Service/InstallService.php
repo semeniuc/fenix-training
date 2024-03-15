@@ -2,6 +2,7 @@
 
 namespace Beupsoft\Fenix\App\Service;
 
+use Beupsoft\App\Config\TrainingConfig;
 use Beupsoft\Fenix\App\Bitrix;
 use Beupsoft\Fenix\App\EventListener\EventListener;
 use Beupsoft\Fenix\App\EventListener\TrainingListener;
@@ -9,11 +10,6 @@ use Beupsoft\Fenix\App\EventListener\DealListener;
 
 class InstallService
 {
-    public function __construct()
-    {
-        # code...
-    }
-
     public function execute(): bool
     {
         if ($isSuccessInstall = $this->app()) {
@@ -30,15 +26,14 @@ class InstallService
 
     private function listener(): array
     {
-        # TODO: Настроить получение trainingEnityTypeId из конфига
-        $trainingEnityTypeId = 149;
+        $trainingEntityTypeId = TrainingConfig::getEntityTypeId();
 
         $events = [
             "onCrmDealUpdate",
             "OnCalendarEntryUpdate",
             "OnCalendarEntryDelete",
-            "onCrmDynamicItemAdd_" . $trainingEnityTypeId,
-            "onCrmDynamicItemUpdate_" . $trainingEnityTypeId,
+            "onCrmDynamicItemAdd_" . $trainingEntityTypeId,
+            "onCrmDynamicItemUpdate_" . $trainingEntityTypeId,
         ];
 
         $data = [];
@@ -52,8 +47,6 @@ class InstallService
                 ],
             ];
         }
-
-        # TODO: После тестирования включить подписку на оффлайн события
 
         $handler = $_ENV["APP_PUBLIC_URL"] . "listener";
         $data["onOfflineEvent"] = [
