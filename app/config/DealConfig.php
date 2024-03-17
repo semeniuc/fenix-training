@@ -9,6 +9,8 @@ class DealConfig extends Environment
             "entityTypeId" => 2,
             "fields" => [
                 "id" => "id",
+                "title" => "ufCrm_1710710399",
+                "contactId" => "contactId",
                 "categoryId" => "categoryId",
                 "stageId" => "stageId",
                 "assignedById" => "assignedById",
@@ -18,14 +20,14 @@ class DealConfig extends Environment
                 "numberTrainings" => "ufCrm_1705395448677",
                 "startDatePause" => "ufCrm_1709802590412",
                 "endDatePause" => "ufCrm_1709802612328",
-                "contactId" => "contactId",
-                "title" => "title",
             ],
         ],
         "prod" => [
             "entityTypeId" => 2,
             "fields" => [
                 "id" => "id",
+                "title" => "ufCrm_1710710399",
+                "contactId" => "contactId",
                 "categoryId" => "categoryId",
                 "stageId" => "stageId",
                 "assignedById" => "assignedById",
@@ -35,8 +37,6 @@ class DealConfig extends Environment
                 "numberTrainings" => "ufCrm_1705395448677",
                 "startDatePause" => "ufCrm_1709802590412",
                 "endDatePause" => "ufCrm_1709802612328",
-                "contactId" => "contactId",
-                "title" => "title",
             ],
         ],
     ];

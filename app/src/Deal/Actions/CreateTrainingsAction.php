@@ -30,7 +30,7 @@ class CreateTrainingsAction
             $availableTime = array_diff_key($trainingsCollection, $unavailableTime);
 
             // Create events
-//            $events = $this->createEvents($availableTime);
+            $events = $this->createEvents($availableTime);
             // Update trainings
         }
 
@@ -58,6 +58,7 @@ class CreateTrainingsAction
         $data = [];
         foreach ($datetimeCollection as $datetime) {
             $data[] = [
+                "title" => $this->dealDTO->getTitle(),
                 "assignedById" => $this->dealDTO->getAssignedById(),
                 "datetimeTraining" => $datetime->format("Y-m-d H:i:s"),
                 "dealId" => $this->dealDTO->getId(),
