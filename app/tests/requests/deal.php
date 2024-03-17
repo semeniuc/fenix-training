@@ -1,12 +1,11 @@
 <?php
 
 
-
 try {
     $dealId = 18;
 
-    $deal = new \Beupsoft\Fenix\App\Service\DealService();
-     $response = $deal->getDeal($dealId);
+    $deal = new \Beupsoft\Fenix\App\Deal\DealService();
+    $response = $deal->getDeal($dealId);
 //    $response = $training->handle($trainingId);
 
 } catch (Throwable $th) {

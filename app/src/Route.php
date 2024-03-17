@@ -6,7 +6,7 @@ use Beupsoft\Fenix\App\Controller\IndexController;
 use Beupsoft\Fenix\App\Controller\InstallController;
 use Beupsoft\Fenix\App\Controller\SubscriptionController;
 
-class Kernel
+class Route
 {
     public function __construct(string $requestUri)
     {

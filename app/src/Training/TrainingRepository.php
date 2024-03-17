@@ -1,10 +1,9 @@
-<?php 
+<?php
 
-namespace Beupsoft\Fenix\App\Repository;
+namespace Beupsoft\Fenix\App\Training;
 
-use Beupsoft\Fenix\App\Bitrix;
 use Beupsoft\App\Config\TrainingConfig;
-use Beupsoft\Fenix\App\DTO\TrainingDTO;
+use Beupsoft\Fenix\App\Bitrix;
 
 class TrainingRepository
 {
@@ -36,7 +35,7 @@ class TrainingRepository
         return new TrainingDTO($data);
     }
 
-    public function upd(int $trainingId, array $data): bool 
+    public function upd(int $trainingId, array $data): bool
     {
         $trainingData = Bitrix::call("crm.item.update", [
             "entityTypeId" => TrainingConfig::getEntityTypeId(),
@@ -55,12 +54,11 @@ class TrainingRepository
             "entityTypeId" => TrainingConfig::getEntityTypeId(),
             "filter" => [
                 "parentId2" => $dealId
-            ], 
+            ],
         ])["result"]["items"];
 
         if (!empty($trainingsData)) {
             foreach ($trainingsData as $trainingData) {
-
                 $data = [];
                 if ($trainingData) {
                     foreach (TrainingConfig::getFields() as $key => $field) {
@@ -69,7 +67,7 @@ class TrainingRepository
                 }
 
                 $dto = new TrainingDTO($data);
-                
+
                 if ($dto->getId() !== null) {
                     $trainingsDTO[] = $dto;
                 }

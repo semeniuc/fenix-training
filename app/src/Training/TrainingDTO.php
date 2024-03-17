@@ -1,10 +1,10 @@
 <?php
 
-namespace Beupsoft\Fenix\App\DTO;
+namespace Beupsoft\Fenix\App\Training;
 
 use DateTime;
 
-class TrainingDTO 
+class TrainingDTO
 {
     private ?int $id;
     private ?string $title;
@@ -17,7 +17,7 @@ class TrainingDTO
     private ?int $whoIsClosed;
     private ?int $contactId;
 
-    public function __construct(array $data) 
+    public function __construct(array $data)
     {
         $this->id = $data["id"];
         $this->title = $data["title"];
@@ -33,7 +33,7 @@ class TrainingDTO
 
     /**
      * Get the value of id
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -41,7 +41,7 @@ class TrainingDTO
 
     /**
      * Get the value of title
-     */ 
+     */
     public function getTitle()
     {
         return $this->title;
@@ -49,7 +49,7 @@ class TrainingDTO
 
     /**
      * Get the value of categoryId
-     */ 
+     */
     public function getCategoryId()
     {
         return $this->categoryId;
@@ -57,7 +57,7 @@ class TrainingDTO
 
     /**
      * Get the value of stageId
-     */ 
+     */
     public function getStageId()
     {
         return $this->stageId;
@@ -65,7 +65,7 @@ class TrainingDTO
 
     /**
      * Get the value of dealId
-     */ 
+     */
     public function getDealId()
     {
         return $this->dealId;
@@ -73,7 +73,7 @@ class TrainingDTO
 
     /**
      * Get the value of eventId
-     */ 
+     */
     public function getEventId()
     {
         return $this->eventId;
@@ -81,7 +81,7 @@ class TrainingDTO
 
     /**
      * Get the value of assignedById
-     */ 
+     */
     public function getAssignedById()
     {
         return $this->assignedById;
@@ -89,7 +89,7 @@ class TrainingDTO
 
     /**
      * Get the value of datetimeTraining
-     */ 
+     */
     public function getDatetimeTraining()
     {
         return $this->datetimeTraining;
@@ -97,7 +97,7 @@ class TrainingDTO
 
     /**
      * Get the value of whoIsClosed
-     */ 
+     */
     public function getWhoIsClosed()
     {
         return $this->whoIsClosed;

@@ -1,10 +1,10 @@
 <?php
 
-namespace Beupsoft\Fenix\App\DTO;
+namespace Beupsoft\Fenix\App\Event;
 
 use DateTime;
 
-class EventCalendarDTO 
+class EventCalendarDTO
 {
     private ?int $id;
     private ?string $type;
@@ -41,7 +41,7 @@ class EventCalendarDTO
 
     /**
      * Get the value of id
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -55,7 +55,7 @@ class EventCalendarDTO
 
     /**
      * Get the value of type
-     */ 
+     */
     public function getType()
     {
         return $this->type;
@@ -63,7 +63,7 @@ class EventCalendarDTO
 
     /**
      * Get the value of ownerId
-     */ 
+     */
     public function getOwnerId()
     {
         return $this->ownerId;
@@ -71,7 +71,7 @@ class EventCalendarDTO
 
     /**
      * Get the value of section
-     */ 
+     */
     public function getSection()
     {
         return $this->section;
@@ -79,7 +79,7 @@ class EventCalendarDTO
 
     /**
      * Get the value of accessibility
-     */ 
+     */
     public function getAccessibility()
     {
         return $this->accessibility;
@@ -87,7 +87,7 @@ class EventCalendarDTO
 
     /**
      * Get the value of from
-     */ 
+     */
     public function getFrom()
     {
         return $this->from;
@@ -95,7 +95,7 @@ class EventCalendarDTO
 
     /**
      * Get the value of to
-     */ 
+     */
     public function getTo()
     {
         return $this->to;
@@ -103,7 +103,7 @@ class EventCalendarDTO
 
     /**
      * Get the value of name
-     */ 
+     */
     public function getName()
     {
         return $this->name;
@@ -111,7 +111,7 @@ class EventCalendarDTO
 
     /**
      * Get the value of description
-     */ 
+     */
     public function getDescription()
     {
         return $this->description;
@@ -119,7 +119,7 @@ class EventCalendarDTO
 
     /**
      * Get the value of is_meeting
-     */ 
+     */
     public function getIsmeeting()
     {
         return $this->isMeeting;
@@ -127,7 +127,7 @@ class EventCalendarDTO
 
     /**
      * Get the value of location
-     */ 
+     */
     public function getLocation()
     {
         return $this->location;
@@ -135,7 +135,7 @@ class EventCalendarDTO
 
     /**
      * Get the value of attendees
-     */ 
+     */
     public function getAttendees()
     {
         return $this->attendees;
@@ -143,7 +143,7 @@ class EventCalendarDTO
 
     /**
      * Get the value of color
-     */ 
+     */
     public function getColor()
     {
         return $this->color;
@@ -151,7 +151,7 @@ class EventCalendarDTO
 
     /**
      * Get the value of text_color
-     */ 
+     */
     public function getTextColor()
     {
         return $this->textColor;

@@ -1,10 +1,9 @@
 <?php
 
-namespace Beupsoft\Fenix\App\Service;
+namespace Beupsoft\Fenix\App\Training;
 
-use Beupsoft\Fenix\App\DTO\TrainingDTO;
-use Beupsoft\Fenix\App\DTO\EventCalendarDTO;
-use Beupsoft\Fenix\App\Repository\TrainingRepository;
+use Beupsoft\Fenix\App\Event\EventCalendarDTO;
+use Beupsoft\Fenix\App\Event\EventCalendarService;
 
 class TrainingService
 {

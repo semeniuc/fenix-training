@@ -1,10 +1,10 @@
 <?php
 
-namespace Beupsoft\Fenix\App\DTO;
+namespace Beupsoft\Fenix\App\Deal;
 
 use DateTime;
 
-class DealDTO 
+class DealDTO
 {
     private ?int $id;
     private ?int $categoryId;

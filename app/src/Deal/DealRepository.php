@@ -1,10 +1,10 @@
-<?php 
+<?php
 
-namespace Beupsoft\Fenix\App\Repository;
+namespace Beupsoft\Fenix\App\Deal;
 
-use Beupsoft\Fenix\App\Bitrix;
 use Beupsoft\App\Config\DealConfig;
-use Beupsoft\Fenix\App\DTO\DealDTO;
+use Beupsoft\Fenix\App\Bitrix;
+use Beupsoft\Fenix\App\Event\DealDTO;
 
 class DealRepository
 {

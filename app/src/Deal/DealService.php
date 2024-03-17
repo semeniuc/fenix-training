@@ -1,11 +1,11 @@
 <?php
 
-namespace Beupsoft\Fenix\App\Service;
+namespace Beupsoft\Fenix\App\Deal;
 
-use Exception;
-use Beupsoft\Fenix\App\DTO\DealDTO;
+use Beupsoft\Fenix\App\Event\DealDTO;
 use Beupsoft\Fenix\App\Repository\DealRepository;
-use Beupsoft\Fenix\App\Repository\TrainingRepository;
+use Beupsoft\Fenix\App\Training\TrainingRepository;
+use Beupsoft\Fenix\App\Training\TrainingService;
 
 class DealService
 {
@@ -28,7 +28,7 @@ class DealService
         $categoryId = $dealDTO->getCategoryId();
         $stageId = $dealDTO->getStageId();
 
-        if($categoryId == 6) {
+        if ($categoryId == 6) {
             $this->createTrainings($dealDTO);
             switch ($stageId) {
                 case 'C6:PREPARATION': // Init
@@ -49,7 +49,7 @@ class DealService
     public function getDeal(int $dealId): DealDTO
     {
         return $this->dealRepository->get($dealId);
-    } 
+    }
 
     private function getTrainingsByDeal(int $dealId): array
     {
@@ -58,7 +58,11 @@ class DealService
 
     private function createTrainings(DealDTO $dealDTO)
     {
-        $trainingSchedule = $this->getTrainingSchedule($dealDTO->getStartDate(), $dealDTO->getDaysAndTime(), $dealDTO->getNumberTrainings());
+        $trainingSchedule = $this->getTrainingSchedule(
+            $dealDTO->getStartDate(),
+            $dealDTO->getDaysAndTime(),
+            $dealDTO->getNumberTrainings()
+        );
 
         if ($trainingSchedule) {
             foreach ($trainingSchedule as $date) {

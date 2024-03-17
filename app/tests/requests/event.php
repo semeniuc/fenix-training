@@ -1,7 +1,6 @@
 <?php
 
-use Beupsoft\Fenix\App\Bitrix;
-use Beupsoft\Fenix\App\Service\EventCalendarService;
+use Beupsoft\Fenix\App\Event\EventCalendarService;
 
 try {
     $eventId = 3418;
@@ -56,7 +55,6 @@ try {
     dd($data);
 
     $response = $eventCalendarService->createEventCalendar($data);
-
 } catch (Throwable $th) {
     $response = [
         'code' => $th->getCode(),

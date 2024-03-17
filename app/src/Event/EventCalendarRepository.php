@@ -1,15 +1,15 @@
-<?php 
+<?php
 
-namespace Beupsoft\Fenix\App\Repository;
+namespace Beupsoft\Fenix\App\Event;
 
 use Beupsoft\App\Config\EventCalendarConfig;
 use Beupsoft\Fenix\App\Bitrix;
-use Beupsoft\Fenix\App\DTO\EventCalendarDTO;
 use DateTime;
 
 class EventCalendarRepository
 {
     private array $ownerCalendar;
+
     public function __construct()
     {
         $this->ownerCalendar = EventCalendarConfig::getOwnerCalendar();
@@ -31,7 +31,8 @@ class EventCalendarRepository
             "description" => $data["DESCRIPTION"] ?? null,
             "is_meeting" => $data["IS_MEETING"] ?? null,
             "location" => $data["LOCATION"] ?? null,
-            "attendees" => (!empty($data["ATTENDEE_LIST"])) ? array_map(fn($item) => $item["id"], $data["ATTENDEE_LIST"]) : null,
+            "attendees" => (!empty($data["ATTENDEE_LIST"])) ? array_map(fn($item) => $item["id"],
+                $data["ATTENDEE_LIST"]) : null,
             "color" => $data["COLOR"] ?? null,
         ]);
 

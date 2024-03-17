@@ -1,14 +1,13 @@
 <?php
 
-namespace Beupsoft\Fenix\App\Service;
+namespace Beupsoft\Fenix\App;
 
 use Beupsoft\App\Config\TrainingConfig;
-use Beupsoft\Fenix\App\Bitrix;
+use Beupsoft\Fenix\App\EventListener\DealListener;
 use Beupsoft\Fenix\App\EventListener\EventListener;
 use Beupsoft\Fenix\App\EventListener\TrainingListener;
-use Beupsoft\Fenix\App\EventListener\DealListener;
 
-class InstallService
+class Install
 {
     public function execute(): bool
     {
@@ -48,7 +47,7 @@ class InstallService
             ];
         }
 
-        $handler = $_ENV["APP_PUBLIC_URL"] . "listener";
+        $handler = $_ENV["APP_PUBLIC_URL"] . "?event=listener";
         $data["onOfflineEvent"] = [
             "method" => "event.bind",
             "params" => [

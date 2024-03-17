@@ -1,9 +1,6 @@
 <?php
 
-namespace Beupsoft\Fenix\App\Service;
-
-use Beupsoft\Fenix\App\DTO\EventCalendarDTO;
-use Beupsoft\Fenix\App\Repository\EventCalendarRepository;
+namespace Beupsoft\Fenix\App\Event;
 
 class EventCalendarService
 {
@@ -14,9 +11,9 @@ class EventCalendarService
         $this->eventCalendarRepository = new EventCalendarRepository();
     }
 
-    public function createEventCalendar(array $data) : EventCalendarDTO 
+    public function createEventCalendar(array $data): EventCalendarDTO
     {
-        return  $this->eventCalendarRepository->add($data);
+        return $this->eventCalendarRepository->add($data);
     }
 
     public function deleteEventCalendar(int $eventId): bool

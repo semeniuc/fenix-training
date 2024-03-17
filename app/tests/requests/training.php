@@ -1,12 +1,12 @@
 <?php
 
-use Beupsoft\Fenix\App\Service\TrainingService;
+use Beupsoft\Fenix\App\Training\TrainingService;
 
 try {
     $trainingId = 10;
 
     $training = new TrainingService();
-     $response = $training->getTraining($trainingId);
+    $response = $training->getTraining($trainingId);
 //    $response = $training->handle($trainingId);
 
 } catch (Throwable $th) {

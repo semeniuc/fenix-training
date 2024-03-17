@@ -1,13 +1,11 @@
 <?php
 
-namespace Beupsoft\Fenix\App\Controller;
+namespace Beupsoft\Fenix\App;
 
-use Beupsoft\Fenix\App\Bitrix;
 use Beupsoft\Fenix\App\Deal\DealService;
-use Beupsoft\Fenix\App\Logging;
 use Beupsoft\Fenix\App\Training\TrainingService;
 
-class SubscriptionController
+class Listener
 {
     public function __construct()
     {
