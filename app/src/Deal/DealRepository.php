@@ -3,11 +3,12 @@
 namespace Beupsoft\Fenix\App\Deal;
 
 use Beupsoft\App\Config\DealConfig;
+use Beupsoft\App\Config\TrainingConfig;
 use Beupsoft\Fenix\App\Bitrix;
+use Beupsoft\Fenix\App\Training\TrainingDTO;
 
 class DealRepository
 {
-    # TODO: Оюъединить запросы в batch
     public function get(int $dealId): ?DealDTO
     {
         $dealData = Bitrix::call("crm.item.get", [
@@ -95,19 +96,53 @@ class DealRepository
         ])["result"]["fields"];
     }
 
-    public function addTranings(array $data): array
+    /**
+     * @param array $data fields for trainings
+     * @return array training ids
+     */
+    public function createTrainings(array $data): array
     {
-//        return Bitrix::call("crm.item.add", [
-//            "entityTypeId" => TrainingConfig::getEntityTypeId(),
-//            "fields" => $data,
-//            "params" => [
-//                "REGISTER_SONET_EVENT" => "Y",
-//            ],
-//        ])["result"]["item"]["id"];
+        $arData = [];
+        $entityTypeId = TrainingConfig::getEntityTypeId();
+        $fields = TrainingConfig::getFields();
 
-//        $request = Bitrix::callBatch($data);
+        $post = [];
+        foreach ($data as $item) {
+            foreach ($item as $key => $value) {
+                if (isset($fields[$key])) {
+                    $post[$fields[$key]] = $value;
+                }
+            }
 
-        dd(["batch" => $data]);
+            $arData[] = [
+                "method" => "crm.item.add",
+                "params" => [
+                    "entityTypeId" => $entityTypeId,
+                    "fields" => $post,
+                ],
+            ];
+
+            unset($post);
+        }
+
+        $batch = Bitrix::callBatch($arData)["result"]["result"] ?? [];
+
+        $trainingCollection = [];
+        if (!empty($batch)) {
+            foreach ($batch as $record) {
+                if (isset($record["item"]["id"])) {
+                    $data = [];
+                    foreach ($fields as $key => $field) {
+                        $data[$key] = $record["item"][$field] ?? null;
+                    }
+                    
+                    $trainingCollection[] = new TrainingDTO($data);
+                }
+            }
+        }
+
+        return $trainingCollection;
     }
+
 
 }

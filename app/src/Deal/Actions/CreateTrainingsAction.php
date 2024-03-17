@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Beupsoft\Fenix\App\Deal\Actions;
 
-use Beupsoft\App\Config\TrainingConfig;
 use Beupsoft\Fenix\App\Deal\DealDTO;
 use Beupsoft\Fenix\App\Deal\DealRepository;
 use Beupsoft\Fenix\App\Deal\Tools\GenerateSchedule;
@@ -45,18 +44,16 @@ class CreateTrainingsAction
 
     private function createTrainings(array $datetimeCollection): array
     {
-        $fields = TrainingConfig::getFields();
-
         $data = [];
         foreach ($datetimeCollection as $datetime) {
             $data[] = [
-                $fields["assignedById"] => $this->dealDTO->getAssignedById(),
-                $fields["datetimeTraining"] => $datetime->format("Y-m-d H:i:s"),
-                $fields["dealId"] => $this->dealDTO->getId(),
-                $fields["contactId"] => $this->dealDTO->getContactId(),
+                "assignedById" => $this->dealDTO->getAssignedById(),
+                "datetimeTraining" => $datetime->format("Y-m-d H:i:s"),
+                "dealId" => $this->dealDTO->getId(),
+                "contactId" => $this->dealDTO->getContactId(),
             ];
         }
-
-        return $this->dealRepository->addTranings($data);
+        
+        return $this->dealRepository->createTrainings($data);
     }
 }
