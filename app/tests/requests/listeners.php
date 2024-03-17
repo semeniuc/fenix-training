@@ -1,10 +1,8 @@
 <?php
 
-use Beupsoft\Fenix\App\Service\InstallService;
 use Beupsoft\Fenix\App\Bitrix;
 
 try {
-
     function deleteHandlerListener(): array
     {
         $data = [];
@@ -13,7 +11,6 @@ try {
 
         if ($listeners) {
             foreach ($listeners as $listener) {
-
                 if (isset($listener["handler"])) {
                     $data[$listener["event"]] = [
                         "method" => "event.unbind",
@@ -24,7 +21,7 @@ try {
                     ];
 
                     break;
-                } 
+                }
             }
         }
 
@@ -67,16 +64,14 @@ try {
         return Bitrix::call("event.offline.get")["events"] ?? [];
     }
 
-//     $response = deleteListeners();
-//     $response = deleteHandlerListener();
+//    $response = deleteListeners();
+//    $response = deleteHandlerListener();
     $response = getListeners();
     // $response = getEvents();
 
 
     // $response = Bitrix::call("event.get");
     // $response = Bitrix::call("event.offline.get");
-
-
 
 
 } catch (Throwable $th) {

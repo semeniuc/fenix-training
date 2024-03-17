@@ -4,7 +4,7 @@
 try {
     $dealId = 18;
 
-    $deal = new \Beupsoft\Fenix\App\Deal\DealService();
+    $deal = new \Beupsoft\Fenix\App\Deal\DealController();
     $response = $deal->getDeal($dealId);
 //    $response = $training->handle($trainingId);
 

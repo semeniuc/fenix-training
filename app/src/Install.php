@@ -3,12 +3,14 @@
 namespace Beupsoft\Fenix\App;
 
 use Beupsoft\App\Config\TrainingConfig;
-use Beupsoft\Fenix\App\EventListener\DealListener;
-use Beupsoft\Fenix\App\EventListener\EventListener;
-use Beupsoft\Fenix\App\EventListener\TrainingListener;
 
 class Install
 {
+    public function __construct()
+    {
+        $this->response($this->execute());
+    }
+
     public function execute(): bool
     {
         if ($isSuccessInstall = $this->app()) {
@@ -21,6 +23,25 @@ class Install
     private function app(): bool
     {
         return Bitrix::installApp()["install"];
+    }
+
+    private function response(bool $isSuccessInstall): void
+    {
+        $htmlHead =
+            "<head>
+            <script src=\"//api.bitrix24.com/api/v1/\"></script>
+            <script>
+                BX24.init(function () {
+                    BX24.installFinish();
+                });
+            </script>
+        </head>";
+
+        if ($isSuccessInstall === true) {
+            echo $htmlHead . "<body>installation has been finished</body>";
+        } else {
+            echo "<body>installation error</body>";
+        }
     }
 
     private function listener(): array

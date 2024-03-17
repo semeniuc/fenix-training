@@ -2,8 +2,7 @@
 
 namespace Beupsoft\Fenix\App;
 
-use Beupsoft\Fenix\App\Deal\DealService;
-use Beupsoft\Fenix\App\Training\TrainingService;
+use Beupsoft\Fenix\App\Deal\DealController;
 
 class Listener
 {
@@ -11,14 +10,15 @@ class Listener
     {
         while (!empty($events = $this->getEventsData())) {
             foreach ($events as $event) {
+                $elementId = $event["EVENT_DATA"]["FIELDS"]["ID"];
                 try {
                     switch ($event["EVENT_NAME"]) {
                         case "ONCRMDEALUPDATE":
-                            (new DealService())->handle($event["EVENT_DATA"]["FIELDS"]["ID"]);
+                            new DealController($elementId);
                             break;
                         case "ONCRMDYNAMICITEMUPDATE_149":
                         case "ONCRMDYNAMICITEMADD_149":
-                            (new TrainingService())->handle($event["EVENT_DATA"]["FIELDS"]["ID"]);
+//                            (new TrainingService())->handle($event["EVENT_DATA"]["FIELDS"]["ID"]);
                             break;
                         case "ONCALENDARENTRYDELETE":
                         case "ONCALENDARENTRYUPDATE":

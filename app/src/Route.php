@@ -2,10 +2,6 @@
 
 namespace Beupsoft\Fenix\App;
 
-use Beupsoft\Fenix\App\Controller\IndexController;
-use Beupsoft\Fenix\App\Controller\InstallController;
-use Beupsoft\Fenix\App\Controller\SubscriptionController;
-
 class Route
 {
     public function __construct(string $requestUri)
@@ -17,14 +13,11 @@ class Route
     private function execute(string $route): void
     {
         match ($route) {
-            "/" => new IndexController,
-            "/install" => new InstallController,
-            "/listener" => new SubscriptionController,
-
+            "/install" => new Install(),
+            "/listener" => new Listener(),
 
             "/get-listeners" => $this->testRequest("listeners"),
             "/get-events" => $this->testRequest("events"),
-
             "/get-deal" => $this->testRequest("deal"),
             "/get-training" => $this->testRequest("training"),
             "/get-sections" => $this->testRequest("sections"),
@@ -32,7 +25,7 @@ class Route
             "/get-accessibility" => $this->testRequest("accessibility"),
             "/get-enum" => $this->testRequest("enum"),
 
-            default => throw new \Exception(message: "Controller $route not found", code: 404),
+            default => throw new \Exception(message: "Route $route not found", code: 404),
         };
     }
 

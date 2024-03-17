@@ -6,7 +6,7 @@ use DateTime;
 
 class DealDTO
 {
-    private ?int $id;
+    private ?int $contactId;
     private ?int $categoryId;
     private ?string $stageId;
     private ?int $assignedById;
@@ -15,12 +15,12 @@ class DealDTO
     private ?int $numberTrainings;
     private ?DateTime $startDatePause;
     private ?DateTime $endDatePause;
-    private ?string $title;
-    private ?int $contactId;
 
     public function __construct(array $data)
     {
         $this->id = $data["id"];
+        $this->title = $data["title"];
+        $this->contactId = $data["contactId"];
         $this->categoryId = $data["categoryId"];
         $this->stageId = $data["stageId"];
         $this->assignedById = $data["assignedById"];
@@ -29,95 +29,63 @@ class DealDTO
         $this->numberTrainings = $data["numberTrainings"];
         $this->startDatePause = (!empty($data['startDatePause'])) ? new DateTime($data['startDatePause']) : null;
         $this->endDatePause = (!empty($data['endDatePause'])) ? new DateTime($data['endDatePause']) : null;
-        $this->title = $data["title"];
-        $this->contactId = $data["contactId"];
     }
 
-    /**
-     * @return int|null
-     */
+    private ?int $id;
+    private ?string $title;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getCategoryId(): ?int
-    {
-        return $this->categoryId;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getStageId(): ?string
-    {
-        return $this->stageId;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getAssignedById(): ?int
-    {
-        return $this->assignedById;
-    }
-
-    /**
-     * @return array|null
-     */
-    public function getDaysAndTime(): ?array
-    {
-        return $this->daysAndTime;
-    }
-
-    /**
-     * @return DateTime|null
-     */
-    public function getStartDate(): ?DateTime
-    {
-        return $this->startDate;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getNumberTrainings(): ?int
-    {
-        return $this->numberTrainings;
-    }
-
-    /**
-     * @return DateTime|null
-     */
-    public function getStartDatePause(): ?DateTime
-    {
-        return $this->startDatePause;
-    }
-
-    /**
-     * @return DateTime|null
-     */
-    public function getEndDatePause(): ?DateTime
-    {
-        return $this->endDatePause;
-    }
-
-    /**
-     * @return string|null
-     */
     public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     * @return int|null
-     */
     public function getContactId(): ?int
     {
         return $this->contactId;
+    }
+
+    public function getCategoryId(): ?int
+    {
+        return $this->categoryId;
+    }
+
+    public function getStageId(): ?string
+    {
+        return $this->stageId;
+    }
+
+    public function getAssignedById(): ?int
+    {
+        return $this->assignedById;
+    }
+
+    public function getDaysAndTime(): ?array
+    {
+        return $this->daysAndTime;
+    }
+
+    public function getStartDate(): ?DateTime
+    {
+        return $this->startDate;
+    }
+
+    public function getNumberTrainings(): ?int
+    {
+        return $this->numberTrainings;
+    }
+
+    public function getStartDatePause(): ?DateTime
+    {
+        return $this->startDatePause;
+    }
+
+    public function getEndDatePause(): ?DateTime
+    {
+        return $this->endDatePause;
     }
 }

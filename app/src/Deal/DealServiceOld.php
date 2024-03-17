@@ -7,7 +7,7 @@ use Beupsoft\Fenix\App\Repository\DealRepository;
 use Beupsoft\Fenix\App\Training\TrainingRepository;
 use Beupsoft\Fenix\App\Training\TrainingService;
 
-class DealService
+class DealServiceOld
 {
     private DealRepository $dealRepository;
     private TrainingRepository $trainingRepository;

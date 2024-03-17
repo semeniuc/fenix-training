@@ -20,7 +20,7 @@ class DealRepository
                 $data[$key] = $dealData[$field] ?? null;
             }
 
-            $descValues = $this->geDescValues();
+            $descValues = $this->getDescValues();
 
             $data["daysAndTime"] = $this->getDaysAndTime($dealData, $descValues);
             $data["numberTrainings"] = $this->getNumberTrainings($dealData, $descValues);
@@ -88,10 +88,26 @@ class DealRepository
         return null;
     }
 
-    private function geDescValues(): array
+    private function getDescValues(): array
     {
         return Bitrix::call("crm.item.fields", [
             "entityTypeId" => DealConfig::getEntityTypeId(),
         ])["result"]["fields"];
     }
+
+    public function addTranings(array $data): array
+    {
+//        return Bitrix::call("crm.item.add", [
+//            "entityTypeId" => TrainingConfig::getEntityTypeId(),
+//            "fields" => $data,
+//            "params" => [
+//                "REGISTER_SONET_EVENT" => "Y",
+//            ],
+//        ])["result"]["item"]["id"];
+
+//        $request = Bitrix::callBatch($data);
+
+        dd(["batch" => $data]);
+    }
+
 }

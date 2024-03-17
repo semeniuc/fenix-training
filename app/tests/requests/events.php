@@ -1,8 +1,8 @@
 <?php
 
-use Beupsoft\Fenix\App\Service\InstallService;
 use Beupsoft\Fenix\App\Bitrix;
-use Beupsoft\Fenix\App\Controller\SubscriptionController;
+use Beupsoft\Fenix\App\Listener;
+
 
 try {
     function getEvents(): array
@@ -14,8 +14,7 @@ try {
     // $response = ["test"];
 
 
-    $response = new SubscriptionController();
-
+    $response = new Listener();
 } catch (Throwable $th) {
     $response = [
         'code' => $th->getCode(),
