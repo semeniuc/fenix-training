@@ -22,12 +22,14 @@ class CreateTrainingsAction
         $trainingSchedule = $this->generateSchedule();
 
         if ($trainingSchedule) {
-            $trainingsDto = $this->createTrainings($trainingSchedule);
+            $trainingsCollection = $this->createTrainings($trainingSchedule);
+            $this->checkTimeAvailability($trainingsCollection);
         }
+
 
         dd([
             "trainingSchedule" => $trainingSchedule,
-            "trainingsDto" => $trainingsDto,
+            "trainingsDto" => $trainingsCollection,
         ]);
     }
 
@@ -53,7 +55,21 @@ class CreateTrainingsAction
                 "contactId" => $this->dealDTO->getContactId(),
             ];
         }
-        
+
         return $this->dealRepository->createTrainings($data);
+    }
+
+    private function checkTimeAvailability(array $trainingsCollection)
+    {
+        $unavailableTime = $this->dealRepository->getUnavailableTime($trainingsCollection);
+
+//        dd([
+//            "trainingsCollection" => $trainingsCollection,
+//            "unavailableTime" => $unavailableTime,
+//        ]);
+    }
+
+    private function createEvents(array $trainingsCollection)
+    {
     }
 }

@@ -122,7 +122,7 @@ class DealRepository
                 ],
             ];
 
-            unset($post);
+            unset($data);
         }
 
         $batch = Bitrix::callBatch($arData)["result"]["result"] ?? [];
@@ -135,8 +135,9 @@ class DealRepository
                     foreach ($fields as $key => $field) {
                         $data[$key] = $record["item"][$field] ?? null;
                     }
-                    
-                    $trainingCollection[] = new TrainingDTO($data);
+
+                    $trainingDto = new TrainingDTO($data);
+                    $trainingCollection[$trainingDto->getId()] = $trainingDto;
                 }
             }
         }
@@ -144,5 +145,35 @@ class DealRepository
         return $trainingCollection;
     }
 
+    public function getUnavailableTime(array $trainingsCollection): array
+    {
+        $timeNotAvailable = [];
+        $entityTypeId = TrainingConfig::getEntityTypeId();
 
+        $arData = [];
+        foreach ($trainingsCollection as $trainingDto) {
+            $arData[$trainingDto->getId()] = [
+                "method" => "calendar.accessibility.get",
+                "params" => [
+                    "users" => [$trainingDto->getAssignedById()],
+                    "from" => $trainingDto->getDatetimeTraining()->format("Y-m-d H:i:s"),
+                    "to" => $trainingDto->getDatetimeTraining()->modify("+1 hour")->format("Y-m-d H:i:s"),
+                ],
+            ];
+        }
+
+        $batch = Bitrix::callBatch($arData)["result"]["result"] ?? [];
+
+        if (!empty($batch)) {
+            foreach ($batch as $trainingId => $userIds) {
+                foreach ($userIds as $value) {
+                    if (!empty($value)) {
+                        $timeNotAvailable[$trainingId] = "busy";
+                    }
+                }
+            }
+        }
+
+        return $timeNotAvailable;
+    }
 }
