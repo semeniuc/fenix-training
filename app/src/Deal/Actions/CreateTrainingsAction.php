@@ -30,8 +30,15 @@ class CreateTrainingsAction
             $availableTime = array_diff_key($trainingsCollection, $unavailableTime);
 
             // Create events
-            $events = $this->createEvents($availableTime);
-            // Update trainings
+            if (!empty($availableTime)) {
+                $events = $this->createEvents($availableTime);
+                $this->setLinkEventsToTrainings($availableTime, $events);
+            }
+
+            // Set conflict status
+            if (!empty($unavailableTime)) {
+                $this->setConflictStatusForTrainings($unavailableTime);
+            }
         }
 
 
@@ -39,6 +46,7 @@ class CreateTrainingsAction
             "unavailableTime" => $unavailableTime,
             "availableTime" => $availableTime,
             "trainingsCollection" => $trainingsCollection,
+            "events" => $events,
         ]);
     }
 
@@ -79,7 +87,39 @@ class CreateTrainingsAction
         return $this->dealRepository->createEvents($trainingsCollection);
     }
 
-    private function updateTrainings(array $trainingsCollection)
+    private function setLinkEventsToTrainings(array $trainingsCollection, array $events): void
     {
+        $data = [];
+        foreach ($trainingsCollection as $trainingDto) {
+            $trainingId = $trainingDto->getId();
+
+            if (isset($events[$trainingId])) {
+                $data[] = [
+                    "id" => $trainingId,
+                    "fields" => [
+                        "eventId" => $events[$trainingId],
+                    ],
+                ];
+            }
+        }
+
+        $this->dealRepository->updateTrainings($data);
+    }
+
+    private function setConflictStatusForTrainings(array $trainingsCollection): void
+    {
+        $data = [];
+        foreach ($trainingsCollection as $trainingDto) {
+            $trainingId = $trainingDto->getId();
+
+            $data[] = [
+                "id" => $trainingId,
+                "fields" => [
+                    "stageId" => "DT149_30:PREPARATION",
+                ],
+            ];
+        }
+
+        $this->dealRepository->updateTrainings($data);
     }
 }

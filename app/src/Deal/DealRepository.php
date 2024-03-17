@@ -144,6 +144,35 @@ class DealRepository
         return $trainingCollection;
     }
 
+    public function updateTrainings(array $data)
+    {
+        $arData = [];
+        $entityTypeId = TrainingConfig::getEntityTypeId();
+        $fields = TrainingConfig::getFields();
+
+        foreach ($data as $item) {
+            $post = [];
+            foreach ($item["fields"] as $key => $value) {
+                if (isset($fields[$key])) {
+                    $post[$fields[$key]] = $value;
+                }
+            }
+
+            $arData[] = [
+                "method" => "crm.item.update",
+                "params" => [
+                    "entityTypeId" => $entityTypeId,
+                    "id" => $item["id"],
+                    "fields" => $post,
+                ],
+            ];
+        }
+
+        $batch = Bitrix::callBatch($arData)["result"]["result"] ?? [];
+
+        dd(["arData" => $arData, "data" => $data, "batch" => $batch]);
+    }
+
     public function getUnavailableTime(array $trainingsCollection): array
     {
         $timeNotAvailable = [];
@@ -208,7 +237,7 @@ class DealRepository
         }
 
         $batch = Bitrix::callBatch($arData)["result"]["result"] ?? [];
-        
+
         return $batch;
     }
 }
