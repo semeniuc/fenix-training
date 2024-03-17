@@ -22,15 +22,15 @@ class Kernel
             "/listener" => new SubscriptionController,
 
 
-            "/test/listener" => $this->test("listener"),
-            "/test/events" => $this->test("events"),
+            "/get-listeners" => $this->testRequest("listeners"),
+            "/get-events" => $this->testRequest("events"),
 
-            "/request/deal" => $this->request("deal"),
-            "/request/training" => $this->request("training"),
-            "/request/sections" => $this->request("sections"),
-            "/request/event" => $this->request("event"),
-            "/request/accessibility" => $this->request("accessibility"),
-            "/request/enum" => $this->request("enum"),
+            "/get-deal" => $this->testRequest("deal"),
+            "/get-training" => $this->testRequest("training"),
+            "/get-sections" => $this->testRequest("sections"),
+            "/get-event" => $this->testRequest("event"),
+            "/get-accessibility" => $this->testRequest("accessibility"),
+            "/get-enum" => $this->testRequest("enum"),
 
             default => throw new \Exception(message: "Controller $route not found", code: 404),
         };
@@ -59,12 +59,7 @@ class Kernel
         return (isset($args["event"])) ? "/" . $args["event"] : "/";
     }
 
-    private function test(string $name): void
-    {
-        require_once(dirname(__DIR__) . "/tests/" . $name . ".php");
-    }
-
-    private function request(string $name): void
+    private function testRequest(string $name): void
     {
         require_once(dirname(__DIR__) . "/tests/requests/" . $name . ".php");
     }
