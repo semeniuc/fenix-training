@@ -22,14 +22,23 @@ class CreateTrainingsAction
         $trainingSchedule = $this->generateSchedule();
 
         if ($trainingSchedule) {
+            // Create trainings
             $trainingsCollection = $this->createTrainings($trainingSchedule);
-            $this->checkTimeAvailability($trainingsCollection);
+
+            // Get time statuses
+            $unavailableTime = $this->getUnavailableTime($trainingsCollection);
+            $availableTime = array_diff_key($trainingsCollection, $unavailableTime);
+
+            // Create events
+//            $events = $this->createEvents($availableTime);
+            // Update trainings
         }
 
 
         dd([
-            "trainingSchedule" => $trainingSchedule,
-            "trainingsDto" => $trainingsCollection,
+            "unavailableTime" => $unavailableTime,
+            "availableTime" => $availableTime,
+            "trainingsCollection" => $trainingsCollection,
         ]);
     }
 
@@ -59,17 +68,17 @@ class CreateTrainingsAction
         return $this->dealRepository->createTrainings($data);
     }
 
-    private function checkTimeAvailability(array $trainingsCollection)
+    private function getUnavailableTime(array $trainingsCollection)
     {
-        $unavailableTime = $this->dealRepository->getUnavailableTime($trainingsCollection);
-
-//        dd([
-//            "trainingsCollection" => $trainingsCollection,
-//            "unavailableTime" => $unavailableTime,
-//        ]);
+        return $this->dealRepository->getUnavailableTime($trainingsCollection);
     }
 
-    private function createEvents(array $trainingsCollection)
+    private function createEvents(array $trainingsCollection): array
+    {
+        return $this->dealRepository->createEvents($trainingsCollection);
+    }
+
+    private function updateTrainings(array $trainingsCollection)
     {
     }
 }

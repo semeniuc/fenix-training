@@ -3,6 +3,7 @@
 namespace Beupsoft\Fenix\App\Deal;
 
 use Beupsoft\App\Config\DealConfig;
+use Beupsoft\App\Config\EventCalendarConfig;
 use Beupsoft\App\Config\TrainingConfig;
 use Beupsoft\Fenix\App\Bitrix;
 use Beupsoft\Fenix\App\Training\TrainingDTO;
@@ -106,8 +107,8 @@ class DealRepository
         $entityTypeId = TrainingConfig::getEntityTypeId();
         $fields = TrainingConfig::getFields();
 
-        $post = [];
         foreach ($data as $item) {
+            $post = [];
             foreach ($item as $key => $value) {
                 if (isset($fields[$key])) {
                     $post[$fields[$key]] = $value;
@@ -121,8 +122,6 @@ class DealRepository
                     "fields" => $post,
                 ],
             ];
-
-            unset($data);
         }
 
         $batch = Bitrix::callBatch($arData)["result"]["result"] ?? [];
@@ -168,12 +167,48 @@ class DealRepository
             foreach ($batch as $trainingId => $userIds) {
                 foreach ($userIds as $value) {
                     if (!empty($value)) {
-                        $timeNotAvailable[$trainingId] = "busy";
+                        $timeNotAvailable[$trainingId] = $trainingsCollection[$trainingId];
                     }
                 }
             }
         }
 
         return $timeNotAvailable;
+    }
+
+    public function createEvents(array $trainingsCollection): array
+    {
+        $arData = [];
+
+        $ownerCalendar = EventCalendarConfig::getOwnerCalendar();
+        foreach ($trainingsCollection as $trainingDTO) {
+            $trainingId = $trainingDTO->getId();
+            $title = $trainingDTO->getTitle();
+            $assignedById = $trainingDTO->getAssignedById();
+
+            $datetime = $trainingDTO->getDatetimeTraining();
+            $from = ($datetime) ? $datetime->format("Y-m-d H:i:s") : null;
+            $to = ($datetime) ? $datetime->modify("+1 hour")->format("Y-m-d H:i:s") : null;
+
+            $arData[$trainingId] = [
+                "method" => "calendar.event.add",
+                "params" => array_merge($ownerCalendar, [
+                    "accessibility" => "busy",
+                    "from" => $from,
+                    "to" => $to,
+                    "name" => $title,
+                    "description" => "<b><a href=\"https://fenixtraining.bitrix24.pl/page/trenerzy/treningi/type/149/details/{$trainingId}/\">EDYTUJ TRENING</a></b>",
+                    "is_meeting" => "Y",
+                    "location" => "",
+                    "attendees" => [$assignedById],
+                    "color" => "#9cbe1c",
+                    "text_color" => "#283033",
+                ]),
+            ];
+        }
+
+        $batch = Bitrix::callBatch($arData)["result"]["result"] ?? [];
+        
+        return $batch;
     }
 }
