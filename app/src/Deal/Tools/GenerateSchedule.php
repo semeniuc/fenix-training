@@ -28,6 +28,9 @@ class GenerateSchedule
             $data[] = $trainingDate;
         }
 
+        // Unset last value
+        unset($data[$i]);
+        
         return $data;
     }
 
