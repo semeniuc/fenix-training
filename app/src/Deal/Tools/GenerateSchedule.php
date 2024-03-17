@@ -28,11 +28,6 @@ class GenerateSchedule
             $data[] = $trainingDate;
         }
 
-        dd([
-            "daysAndTime" => $this->daysAndTime,
-            "data" => $data,
-        ]);
-
         return $data;
     }
 
