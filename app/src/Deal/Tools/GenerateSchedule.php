@@ -4,53 +4,57 @@ declare(strict_types=1);
 
 namespace Beupsoft\Fenix\App\Deal\Tools;
 
+use DateTime;
+
 class GenerateSchedule
 {
-    private function getTrainingSchedule(\DateTime $startDate, array $daysAndTime, int $numberTrainings): array
+    public function __construct(
+        private DateTime $startDate,
+        private array $daysAndTime,
+        private int $numberTrainings
+    ) {
+    }
+
+    public function get(): array
     {
         $data = [];
 
         // Determine the date of the first training
-        $firstDay = min(array_column($daysAndTime, 'day'));
-        $firstTrainingDate = clone $startDate;
-        $firstTrainingDate->modify("next Monday");
+        $trainingDate = $this->getTrainingDate($this->startDate);
+        $data[] = $trainingDate;
 
-        $currentDate = new \DateTime();
-        while (
-            $firstTrainingDate->format("N") != $firstDay
-            && $firstTrainingDate < $startDate
-            && $firstTrainingDate < $currentDate
-        ) {
-            $firstTrainingDate->modify("+1 day");
+        for ($i = 0; $i < $this->numberTrainings; $i++) {
+            $trainingDate = $this->getTrainingDate($trainingDate);
+            $data[] = $trainingDate;
         }
 
-        // Get dates
-        $count = 0;
-        $weekOffset = 0;
-        while ($count < $numberTrainings) {
-            foreach ($daysAndTime as $key => $value) {
-                $dayOfWeek = $value['day'];
-
-                // Set date
-                $trainingDate = clone $firstTrainingDate;
-                $trainingDate->modify("+" . ($weekOffset * 7 + $dayOfWeek - 1) . " days");
-
-                // Set time
-                $time = $value['time'];
-                $timeParts = explode(':', $time);
-                $trainingDate->setTime((int)$timeParts[0], (int)$timeParts[1]);
-
-                // Save
-                $data[] = $trainingDate;
-
-                $count++;
-                if ($count >= $numberTrainings) {
-                    break;
-                }
-            }
-            $weekOffset++;
-        }
+        dd([
+            "daysAndTime" => $this->daysAndTime,
+            "data" => $data,
+        ]);
 
         return $data;
+    }
+
+    public function getTrainingDate(DateTime $startDate): DateTime
+    {
+        $trainingDate = clone $startDate;
+        $trainingDay = (int)$trainingDate->format("N");
+
+        // Nearest date
+        while (
+            !array_key_exists($trainingDay, $this->daysAndTime)
+            || $trainingDate->getTimestamp() == $startDate->getTimestamp()
+        ) {
+            $trainingDate->modify("+1 day");
+            $trainingDay = (int)$trainingDate->format("N");
+        }
+
+        // Set time
+        $item = $this->daysAndTime[$trainingDay];
+        $timeParts = explode(':', $item["time"]);
+        $trainingDate->setTime((int)$timeParts[0], (int)$timeParts[1]);
+
+        return $trainingDate;
     }
 }

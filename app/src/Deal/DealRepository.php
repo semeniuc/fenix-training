@@ -4,11 +4,11 @@ namespace Beupsoft\Fenix\App\Deal;
 
 use Beupsoft\App\Config\DealConfig;
 use Beupsoft\Fenix\App\Bitrix;
-use Beupsoft\Fenix\App\Event\DealDTO;
 
 class DealRepository
 {
-    public function get(int $dealId): DealDTO
+    # TODO: Оюъединить запросы в batch
+    public function get(int $dealId): ?DealDTO
     {
         $dealData = Bitrix::call("crm.item.get", [
             "entityTypeId" => DealConfig::getEntityTypeId(),
@@ -19,19 +19,22 @@ class DealRepository
             foreach (DealConfig::getFields() as $key => $field) {
                 $data[$key] = $dealData[$field] ?? null;
             }
+
+            $descValues = $this->geDescValues();
+
+            $data["daysAndTime"] = $this->getDaysAndTime($dealData, $descValues);
+            $data["numberTrainings"] = $this->getNumberTrainings($dealData, $descValues);
+
+            return new DealDTO($data);
         }
 
-        $data["daysAndTime"] = $this->getDaysAndTime($dealData);
-        $data["numberTrainings"] = $this->getNumberTrainings($dealData);
-
-        return new DealDTO($data);
+        return null;
     }
 
-    private function getDaysAndTime(array $dealData): array
+    private function getDaysAndTime(array $dealData, array $descValues): array
     {
         $response = [];
 
-        $descValues = $this->geDescValues();
         $dealConfig = DealConfig::getFields();
         $listDays = DealConfig::getListDays();
 
@@ -55,8 +58,8 @@ class DealRepository
 
             foreach ($daysValues as $item) {
                 if (in_array($item["ID"], $daysIds)) {
-                    $response[$item["ID"]] = [
-                        "day" => $listDays[$item["VALUE"]],
+                    $response[$listDays[$item["VALUE"]]] = [
+                        "id" => $item["ID"],
                         "time" => $time,
                     ];
                 }
@@ -66,9 +69,8 @@ class DealRepository
         return $response;
     }
 
-    private function getNumberTrainings(array $dealData): ?int
+    private function getNumberTrainings(array $dealData, array $descValues): ?int
     {
-        $descValues = $this->geDescValues();
         $dealConfig = DealConfig::getFields();
 
         if ($descValues && $dealConfig) {
