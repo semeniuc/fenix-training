@@ -25,7 +25,7 @@ host-access:
 	sudo chmod -R 755 app/ data/
 
 server-access:
-	docker compose exec php chown -R www-data:www-data /var/www/project/
+	docker compose exec php chown -R www-data:www-data /var/www/project/var /var/www/project/vendor
 	docker compose exec php chmod -R 775 /var/www/project/
 
 clear-logs:
