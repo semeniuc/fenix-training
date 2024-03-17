@@ -56,7 +56,7 @@ class Kernel
 
     private function getRoute(array $args = []): string
     {
-        return ($args["event"]) ? "/" . $args["event"] : "/";
+        return (isset($args["event"])) ? "/" . $args["event"] : "/";
     }
 
     private function test(string $name): void
