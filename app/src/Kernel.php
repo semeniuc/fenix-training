@@ -10,12 +10,7 @@ class Kernel
 {
     public function __construct(string $requestUri)
     {
-        $route = $this->extract($requestUri);
-        
-        if ($route === "/favicon.ico") {
-            exit;
-        }
-
+        $route = $this->getRoute($this->getArguments($requestUri));
         $this->execute($route);
     }
 
@@ -41,18 +36,36 @@ class Kernel
         };
     }
 
-    private function extract(string $url): string
+    private function getArguments(string $uri): array
     {
-        return parse_url($url, PHP_URL_PATH);
+        $args = [];
+        $query = parse_url($uri, PHP_URL_QUERY);
+
+        if (!empty($query)) {
+            $parts = explode("&", $query);
+            foreach ($parts as $part) {
+                $pair = explode("=", $part);
+                if ($pair[0]) {
+                    $args[$pair[0]] = $pair[1] ?? null;
+                }
+            }
+        }
+
+        return $args;
     }
 
-    private function test(string $name):void
+    private function getRoute(array $args = []): string
     {
-        require_once (dirname(__DIR__) . "/tests/" . $name . ".php");
+        return ($args["event"]) ? "/" . $args["event"] : "/";
     }
 
-    private function request(string $name):void
+    private function test(string $name): void
     {
-        require_once (dirname(__DIR__) . "/tests/requests/" . $name . ".php");
+        require_once(dirname(__DIR__) . "/tests/" . $name . ".php");
+    }
+
+    private function request(string $name): void
+    {
+        require_once(dirname(__DIR__) . "/tests/requests/" . $name . ".php");
     }
 }
