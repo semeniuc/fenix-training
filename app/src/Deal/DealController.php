@@ -25,7 +25,11 @@ class DealController
                     }
                     break;
                 case 'C6:PREPAYMENT_INVOICE': // Pause
-
+//                    dd($dealDTO);
+//                    if (empty($dealDTO->getTrainingsCreationStatus())) {
+//                        $createTrainings = new CreateTrainingsAction($dealDTO);
+//                        $createTrainings->execute();
+//                    }
                     break;
                 default:
                     # code...

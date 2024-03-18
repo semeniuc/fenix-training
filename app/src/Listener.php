@@ -11,6 +11,10 @@ class Listener
         while (!empty($events = $this->getEventsData())) {
             foreach ($events as $event) {
                 try {
+                    if (!isset($event["EVENT_DATA"]["FIELDS"]["ID"])) {
+                        continue;
+                    }
+                    
                     $elementId = $event["EVENT_DATA"]["FIELDS"]["ID"];
 
                     if (!empty($elementId)) {
