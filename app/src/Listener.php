@@ -3,6 +3,7 @@
 namespace Beupsoft\Fenix\App;
 
 use Beupsoft\Fenix\App\Deal\DealController;
+use Beupsoft\Fenix\App\Training\TrainingService;
 
 class Listener
 {
@@ -14,7 +15,7 @@ class Listener
                     if (!isset($event["EVENT_DATA"]["FIELDS"]["ID"])) {
                         continue;
                     }
-                    
+
                     $elementId = $event["EVENT_DATA"]["FIELDS"]["ID"];
 
                     if (!empty($elementId)) {
@@ -24,7 +25,7 @@ class Listener
                                 break;
                             case "ONCRMDYNAMICITEMUPDATE_149":
                             case "ONCRMDYNAMICITEMADD_149":
-//                            (new TrainingService())->handle($event["EVENT_DATA"]["FIELDS"]["ID"]);
+                                (new TrainingService())->handle($event["EVENT_DATA"]["FIELDS"]["ID"]);
                                 break;
                             case "ONCALENDARENTRYDELETE":
                             case "ONCALENDARENTRYUPDATE":
