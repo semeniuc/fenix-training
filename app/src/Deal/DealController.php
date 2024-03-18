@@ -3,6 +3,7 @@
 namespace Beupsoft\Fenix\App\Deal;
 
 use Beupsoft\Fenix\App\Deal\Actions\CreateTrainingsAction;
+use Beupsoft\Fenix\App\Deal\Repository\DealRepository;
 
 class DealController
 {

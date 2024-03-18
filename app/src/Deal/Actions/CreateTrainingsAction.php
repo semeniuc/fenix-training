@@ -5,16 +5,22 @@ declare(strict_types=1);
 namespace Beupsoft\Fenix\App\Deal\Actions;
 
 use Beupsoft\Fenix\App\Deal\DealDTO;
-use Beupsoft\Fenix\App\Deal\DealRepository;
+use Beupsoft\Fenix\App\Deal\Repository\DealRepository;
+use Beupsoft\Fenix\App\Deal\Repository\EventRepository;
+use Beupsoft\Fenix\App\Deal\Repository\TrainingRepository;
 use Beupsoft\Fenix\App\Deal\Tools\GenerateSchedule;
 
 class CreateTrainingsAction
 {
     private DealRepository $dealRepository;
+    private TrainingRepository $trainingRepository;
+    private EventRepository $eventRepository;
 
     public function __construct(private readonly DealDTO $dealDTO)
     {
         $this->dealRepository = new DealRepository();
+        $this->trainingRepository = new TrainingRepository();
+        $this->eventRepository = new EventRepository();
     }
 
     public function execute()
@@ -66,17 +72,17 @@ class CreateTrainingsAction
             ];
         }
 
-        return $this->dealRepository->createTrainings($data);
+        return $this->trainingRepository->createTrainings($data);
     }
 
     private function getUnavailableTime(array $trainingsCollection)
     {
-        return $this->dealRepository->getUnavailableTime($trainingsCollection);
+        return $this->eventRepository->getUnavailableTime($trainingsCollection);
     }
 
     private function createEvents(array $trainingsCollection): array
     {
-        return $this->dealRepository->createEvents($trainingsCollection);
+        return $this->eventRepository->createEvents($trainingsCollection);
     }
 
     private function setLinkEventsToTrainings(array $trainingsCollection, array $events): void
@@ -95,7 +101,7 @@ class CreateTrainingsAction
             }
         }
 
-        $this->dealRepository->updateTrainings($data);
+        $this->trainingRepository->updateTrainings($data);
     }
 
     private function setConflictStatusForTrainings(array $trainingsCollection): void
@@ -112,6 +118,6 @@ class CreateTrainingsAction
             ];
         }
 
-        $this->dealRepository->updateTrainings($data);
+        $this->trainingRepository->updateTrainings($data);
     }
 }
