@@ -6,6 +6,8 @@ use DateTime;
 
 class DealDTO
 {
+    private ?int $id;
+    private ?string $title;
     private ?int $contactId;
     private ?int $categoryId;
     private ?string $stageId;
@@ -15,6 +17,8 @@ class DealDTO
     private ?int $numberTrainings;
     private ?DateTime $startDatePause;
     private ?DateTime $endDatePause;
+    private ?DateTime $lastDateTraining;
+    private ?string $trainingsCreationStatus;
 
     public function __construct(array $data)
     {
@@ -29,10 +33,9 @@ class DealDTO
         $this->numberTrainings = $data["numberTrainings"];
         $this->startDatePause = (!empty($data['startDatePause'])) ? new DateTime($data['startDatePause']) : null;
         $this->endDatePause = (!empty($data['endDatePause'])) ? new DateTime($data['endDatePause']) : null;
+        $this->lastDateTraining = (!empty($data['lastDateTraining'])) ? new DateTime($data['lastDateTraining']) : null;
+        $this->trainingsCreationStatus = $data["trainingsCreationStatus"];
     }
-
-    private ?int $id;
-    private ?string $title;
 
     public function getId(): ?int
     {
@@ -87,5 +90,15 @@ class DealDTO
     public function getEndDatePause(): ?DateTime
     {
         return $this->endDatePause;
+    }
+
+    public function getLastDateTraining(): ?DateTime
+    {
+        return $this->lastDateTraining;
+    }
+
+    public function getTrainingsCreationStatus(): ?string
+    {
+        return $this->trainingsCreationStatus;
     }
 }

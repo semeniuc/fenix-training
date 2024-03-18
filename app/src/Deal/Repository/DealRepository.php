@@ -8,7 +8,7 @@ use Beupsoft\Fenix\App\Deal\DealDTO;
 
 class DealRepository
 {
-    public function get(int $dealId): ?DealDTO
+    public function getDeal(int $dealId): ?DealDTO
     {
         $dealData = Bitrix::call("crm.item.get", [
             "entityTypeId" => DealConfig::getEntityTypeId(),
@@ -31,6 +31,21 @@ class DealRepository
         return null;
     }
 
+    public function updateDeal(int $dealId, array $data)
+    {
+        $fields = DealConfig::getFields();
+
+        $post = [];
+        foreach ($data as $key => $value) {
+            $post[$fields[$key]] = $value;
+        }
+
+        Bitrix::call("crm.item.update", [
+            "entityTypeId" => DealConfig::getEntityTypeId(),
+            "id" => $dealId,
+            "fields" => $post,
+        ])["result"]["item"];
+    }
 
     private function getDaysAndTime(array $dealData, array $descValues): array
     {
