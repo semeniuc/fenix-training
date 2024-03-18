@@ -10,6 +10,7 @@ use Beupsoft\Fenix\App\Training\TrainingDTO;
 
 class DealRepository
 {
+    # TODO: Разделить файл
     public function get(int $dealId): ?DealDTO
     {
         $dealData = Bitrix::call("crm.item.get", [
@@ -144,7 +145,7 @@ class DealRepository
         return $trainingCollection;
     }
 
-    public function updateTrainings(array $data)
+    public function updateTrainings(array $data): void
     {
         $arData = [];
         $entityTypeId = TrainingConfig::getEntityTypeId();
@@ -169,8 +170,6 @@ class DealRepository
         }
 
         $batch = Bitrix::callBatch($arData)["result"]["result"] ?? [];
-
-        dd(["arData" => $arData, "data" => $data, "batch" => $batch]);
     }
 
     public function getUnavailableTime(array $trainingsCollection): array

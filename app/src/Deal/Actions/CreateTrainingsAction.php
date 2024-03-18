@@ -40,14 +40,6 @@ class CreateTrainingsAction
                 $this->setConflictStatusForTrainings($unavailableTime);
             }
         }
-
-
-        dd([
-            "unavailableTime" => $unavailableTime,
-            "availableTime" => $availableTime,
-            "trainingsCollection" => $trainingsCollection,
-            "events" => $events,
-        ]);
     }
 
     private function generateSchedule(): array
