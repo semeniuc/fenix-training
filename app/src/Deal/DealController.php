@@ -3,6 +3,7 @@
 namespace Beupsoft\Fenix\App\Deal;
 
 use Beupsoft\Fenix\App\Deal\Actions\CreateTrainingsAction;
+use Beupsoft\Fenix\App\Deal\Actions\PauseTrainingsAction;
 use Beupsoft\Fenix\App\Deal\Repository\DealRepository;
 
 class DealController
@@ -25,11 +26,8 @@ class DealController
                     }
                     break;
                 case 'C6:PREPAYMENT_INVOICE': // Pause
-//                    dd($dealDTO);
-//                    if (empty($dealDTO->getTrainingsCreationStatus())) {
-//                        $createTrainings = new CreateTrainingsAction($dealDTO);
-//                        $createTrainings->execute();
-//                    }
+                    $pauseTrainings = new PauseTrainingsAction($dealDTO);
+                    $pauseTrainings->execute();
                     break;
                 default:
                     # code...

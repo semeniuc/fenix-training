@@ -24,5 +24,19 @@ class PauseTrainingsAction
 
     public function execute()
     {
+        # TODO: Закрыть тренировки которые совпадают с паузой
+        $this->closeTrainings();
+
+        # TODO: Посчитать кол-во оставшихся тренировко
+        # TODO: Сгенирировать новый график тренировок
+        # TODO: Создать тренировки
+
+
+    }
+
+    private function closeTrainings()
+    {
+        $trainingsCollection = $this->trainingRepository->getTrainings($this->dealDTO->getId());
+        dd($trainingsCollection);
     }
 }

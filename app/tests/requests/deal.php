@@ -1,13 +1,8 @@
 <?php
 
-
 try {
-    $dealId = 18;
-
-    $deal = new \Beupsoft\Fenix\App\Deal\DealController();
-    $response = $deal->getDeal($dealId);
-//    $response = $training->handle($trainingId);
-
+    $dealId = 1338;
+    $response = new \Beupsoft\Fenix\App\Deal\DealController($dealId);
 } catch (Throwable $th) {
     $response = [
         'code' => $th->getCode(),

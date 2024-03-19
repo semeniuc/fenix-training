@@ -83,4 +83,34 @@ class TrainingRepository
 
         $batch = Bitrix::callBatch($arData)["result"]["result"] ?? [];
     }
+
+    public function getTrainings(int $dealId): array
+    {
+        $trainingCollection = [];
+        $entityTypeId = TrainingConfig::getEntityTypeId();
+        $fields = TrainingConfig::getFields();
+
+        $trainingsData = Bitrix::call("crm.item.list", [
+            "entityTypeId" => $entityTypeId,
+            "filter" => [
+                "parentId2" => $dealId,
+            ],
+        ])["result"]["items"];
+
+        if (!empty($trainingsData)) {
+            foreach ($trainingsData as $record) {
+                if (isset($record["id"])) {
+                    $data = [];
+                    foreach ($fields as $key => $field) {
+                        $data[$key] = $record[$field] ?? null;
+                    }
+
+                    $trainingDto = new TrainingDTO($data);
+                    $trainingCollection[$trainingDto->getId()] = $trainingDto;
+                }
+            }
+        }
+
+        return $trainingCollection;
+    }
 }
