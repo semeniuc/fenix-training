@@ -22,21 +22,52 @@ class PauseTrainingsAction
         $this->eventRepository = new EventRepository();
     }
 
-    public function execute()
+    public function execute(): void
     {
-        # TODO: Закрыть тренировки которые совпадают с паузой
-        $this->closeTrainings();
+        if (
+            $this->dealDTO->getStartDatePause()
+            && $this->dealDTO->getEndDatePause()
+        ) {
+            # TODO: Закрыть тренировки которые совпадают с паузой
+            $trainingsCollection = $this->getTrainingsToClose();
 
-        # TODO: Посчитать кол-во оставшихся тренировко
-        # TODO: Сгенирировать новый график тренировок
-        # TODO: Создать тренировки
+            if (!empty($trainingsCollection)) {
+                $this->closeTrainings($trainingsCollection);
+                $this->deleteEvents($trainingsCollection);
+            }
 
 
+            # TODO: Посчитать кол-во оставшихся тренировко
+            # TODO: Сгенирировать новый график тренировок
+            # TODO: Создать тренировки
+        }
     }
 
-    private function closeTrainings()
+    private function getTrainingsToClose(): array
     {
-        $trainingsCollection = $this->trainingRepository->getTrainings($this->dealDTO->getId());
-        dd($trainingsCollection);
+        return $this->trainingRepository->getTrainings($this->dealDTO->getId());
+    }
+
+    private function closeTrainings(array $trainingsCollection): void
+    {
+        $data = [];
+        foreach ($trainingsCollection as $trainingDto) {
+            $trainingId = $trainingDto->getId();
+
+            $data[$trainingId] = [
+                "id" => $trainingId,
+                "fields" => [
+                    "stageId" => "DT149_30:FAIL",
+                    "ufCrm22EventId" => "",
+                ],
+            ];
+        }
+
+        $this->trainingRepository->updateTrainings($data);
+    }
+
+    private function deleteEvents(array $trainingsCollection): void
+    {
+        $this->eventRepository->deleteEvents($trainingsCollection);
     }
 }

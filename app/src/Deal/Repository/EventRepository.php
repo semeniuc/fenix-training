@@ -77,4 +77,25 @@ class EventRepository
 
         return $batch;
     }
+
+    public function deleteEvents(array $trainingsCollection): void
+    {
+        $arData = [];
+
+        $ownerCalendar = EventCalendarConfig::getOwnerCalendar();
+        foreach ($trainingsCollection as $trainingDTO) {
+            if ($eventId = $trainingDTO->getEventId()) {
+                $arData[$eventId] = [
+                    "method" => "calendar.event.delete",
+                    "params" => array_merge($ownerCalendar, [
+                        "id" => $eventId,
+                    ]),
+                ];
+            }
+        }
+
+        $batch = Bitrix::callBatch($arData)["result"]["result"] ?? [];
+
+        dd(["deleteEvents" => $batch]);
+    }
 }
