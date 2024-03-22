@@ -31,13 +31,12 @@ class PauseTrainingsAction
             # TODO: Закрыть тренировки которые совпадают с паузой
             $trainingsCollection = $this->getTrainingsToClose();
 
-            dd($trainingsCollection);
-
             if (!empty($trainingsCollection)) {
                 $this->closeTrainings($trainingsCollection);
                 $this->deleteEvents($trainingsCollection);
             }
 
+            dd($trainingsCollection);
 
             # TODO: Посчитать кол-во оставшихся тренировок
             # TODO: Найти последнюю запланированную тренировку, либо использовать дату окончания паузы
@@ -106,6 +105,7 @@ class PauseTrainingsAction
                 "fields" => [
                     "stageId" => "DT149_30:FAIL",
                     "ufCrm22EventId" => "",
+                    "ufCrm22_1709810191984" => 484,
                 ],
             ];
         }

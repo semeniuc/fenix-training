@@ -3,7 +3,7 @@
 use Beupsoft\Fenix\App\Training\TrainingService;
 
 try {
-    $trainingId = 1226;
+    $trainingId = 1240;
 
     $training = new TrainingService();
     $response = $training->getTraining($trainingId);
