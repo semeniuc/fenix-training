@@ -47,12 +47,13 @@ class Listener
                     );
                 }
             }
+
+            sleep(2);
         }
     }
 
     private function getEventsData(): array
     {
-        $response = Bitrix::call("event.offline.get");
-        return $response["result"]["events"] ?? [];
+        return Bitrix::call("event.offline.get")["result"]["events"] ?? [];
     }
 }
