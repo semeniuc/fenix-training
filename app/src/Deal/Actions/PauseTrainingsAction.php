@@ -104,8 +104,8 @@ class PauseTrainingsAction
                 "id" => $trainingId,
                 "fields" => [
                     "stageId" => "DT149_30:FAIL",
-                    "ufCrm22EventId" => "",
-                    "ufCrm22_1709810191984" => 484,
+                    "eventId" => "",
+                    "whoIsClosed" => 484,
                 ],
             ];
         }
