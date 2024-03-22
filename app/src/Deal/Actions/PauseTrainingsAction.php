@@ -31,13 +31,16 @@ class PauseTrainingsAction
             # TODO: Закрыть тренировки которые совпадают с паузой
             $trainingsCollection = $this->getTrainingsToClose();
 
+            dd($trainingsCollection);
+
             if (!empty($trainingsCollection)) {
                 $this->closeTrainings($trainingsCollection);
                 $this->deleteEvents($trainingsCollection);
             }
 
 
-            # TODO: Посчитать кол-во оставшихся тренировко
+            # TODO: Посчитать кол-во оставшихся тренировок
+            # TODO: Найти последнюю запланированную тренировку, либо использовать дату окончания паузы
             # TODO: Сгенирировать новый график тренировок
             # TODO: Создать тренировки
         }
@@ -45,7 +48,51 @@ class PauseTrainingsAction
 
     private function getTrainingsToClose(): array
     {
-        return $this->trainingRepository->getTrainings($this->dealDTO->getId());
+        $trainingsCollection = $this->trainingRepository->getTrainings($this->dealDTO->getId());
+
+        # Exclude stages
+        if (!empty($trainingsCollection)) {
+            $trainingsCollection = $this->excludeStages($trainingsCollection);
+        }
+
+        # Exclude time
+        if (!empty($trainingsCollection)) {
+            $trainingsCollection = $this->excludeTime($trainingsCollection);
+        }
+
+        return $trainingsCollection;
+    }
+
+    private function excludeStages(array $trainingsCollection): array
+    {
+        $stageExcluded = [
+            "DT149_30:FAIL",
+            "DT149_30:SUCCESS"
+        ];
+
+        foreach ($trainingsCollection as $key => $trainingDTO) {
+            if (in_array($trainingDTO->getStageId(), $stageExcluded)) {
+                unset($trainingsCollection[$key]);
+            }
+        }
+
+        return $trainingsCollection;
+    }
+
+    private function excludeTime(array $trainingsCollection): array
+    {
+        $startPause = $this->dealDTO->getStartDatePause();
+        $endPause = $this->dealDTO->getEndDatePause();
+
+        foreach ($trainingsCollection as $key => $trainingDTO) {
+            $datetimeTraining = $trainingDTO->getDatetimeTraining();
+
+            if (($datetimeTraining >= $startPause && $datetimeTraining <= $endPause) !== true) {
+                unset($trainingsCollection[$key]);
+            }
+        }
+
+        return $trainingsCollection;
     }
 
     private function closeTrainings(array $trainingsCollection): void
