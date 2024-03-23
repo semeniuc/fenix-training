@@ -18,7 +18,7 @@ class DealDTO
     private ?DateTime $startDatePause;
     private ?DateTime $endDatePause;
     private ?DateTime $lastDateTraining;
-    private ?string $trainingsCreationStatus;
+    private ?string $lastStageAppLaunch;
 
     public function __construct(array $data)
     {
@@ -34,7 +34,7 @@ class DealDTO
         $this->startDatePause = (!empty($data['startDatePause'])) ? new DateTime($data['startDatePause']) : null;
         $this->endDatePause = (!empty($data['endDatePause'])) ? new DateTime($data['endDatePause']) : null;
         $this->lastDateTraining = (!empty($data['lastDateTraining'])) ? new DateTime($data['lastDateTraining']) : null;
-        $this->trainingsCreationStatus = $data["trainingsCreationStatus"];
+        $this->lastStageAppLaunch = $data["lastStageAppLaunch"];
     }
 
     public function getId(): ?int
@@ -97,8 +97,8 @@ class DealDTO
         return $this->lastDateTraining;
     }
 
-    public function getTrainingsCreationStatus(): ?string
+    public function getLastStageAppLaunch(): ?string
     {
-        return $this->trainingsCreationStatus;
+        return $this->lastStageAppLaunch;
     }
 }

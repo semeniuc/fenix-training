@@ -17,13 +17,13 @@ class DealController
     {
         $dealDTO = (new DealRepository())->getDeal($dealId);
 
-        if ($dealDTO->getCategoryId() == 6) {
+        if ($dealDTO->getCategoryId() == 6
+            && $dealDTO->getStageId() !== $dealDTO->getLastStageAppLaunch()
+        ) {
             switch ($dealDTO->getStageId()) {
                 case 'C6:PREPARATION': // Init
-                    if (empty($dealDTO->getTrainingsCreationStatus())) {
-                        $createTrainings = new CreateTrainingsAction($dealDTO);
-                        $createTrainings->execute();
-                    }
+                    $createTrainings = new CreateTrainingsAction($dealDTO);
+                    $createTrainings->execute();
                     break;
                 case 'C6:PREPAYMENT_INVOICE': // Pause
                     $pauseTrainings = new PauseTrainingsAction($dealDTO);

@@ -21,7 +21,7 @@ class DealConfig extends Environment
                 "startDatePause" => "ufCrm_1709802590412",
                 "endDatePause" => "ufCrm_1709802612328",
                 "lastDateTraining" => "ufCrm_1709802659709",
-                "trainingsCreationStatus" => "ufCrm_1710735000",
+                "lastStageAppLaunch" => "ufCrm_1710735000",
             ],
         ],
         "prod" => [
@@ -40,7 +40,7 @@ class DealConfig extends Environment
                 "startDatePause" => "ufCrm_1709802590412",
                 "endDatePause" => "ufCrm_1709802612328",
                 "lastDateTraining" => "ufCrm_1709802659709",
-                "trainingsCreationStatus" => "ufCrm_1710735000",
+                "lastStageAppLaunch" => "ufCrm_1710735000",
             ],
         ],
     ];

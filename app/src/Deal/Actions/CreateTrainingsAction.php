@@ -127,7 +127,7 @@ class CreateTrainingsAction
     private function updateDeal(): void
     {
         $this->dealRepository->updateDeal($this->dealDTO->getId(), [
-            "trainingsCreationStatus" => "created",
+            "lastStageAppLaunch" => $this->dealDTO->getStageId(),
         ]);
     }
 }
