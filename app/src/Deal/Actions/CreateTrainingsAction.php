@@ -23,7 +23,7 @@ class CreateTrainingsAction
         $this->eventRepository = new EventRepository();
     }
 
-    public function execute()
+    public function execute(): void
     {
         $trainingSchedule = $this->generateSchedule();
 
@@ -39,9 +39,6 @@ class CreateTrainingsAction
             if (!empty($availableTime)) {
                 $events = $this->createEvents($availableTime);
                 $this->setLinkEventsToTrainings($availableTime, $events);
-
-                // Update deal
-                $this->updateDeal();
             }
 
             // Set conflict status
@@ -122,12 +119,5 @@ class CreateTrainingsAction
         }
 
         $this->trainingRepository->updateTrainings($data);
-    }
-
-    private function updateDeal(): void
-    {
-        $this->dealRepository->updateDeal($this->dealDTO->getId(), [
-            "lastStageAppLaunch" => $this->dealDTO->getStageId(),
-        ]);
     }
 }

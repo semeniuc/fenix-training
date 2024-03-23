@@ -8,31 +8,43 @@ use Beupsoft\Fenix\App\Deal\Repository\DealRepository;
 
 class DealController
 {
-    public function __construct(int $deadId)
+    private DealRepository $dealRepository;
+    private DealDTO $dealDTO;
+
+    public function __construct(int $dealId)
     {
-        $this->handle($deadId);
+        $this->dealRepository = new DealRepository();
+        $this->dealDTO = $this->dealRepository->getDeal($dealId);
+        $this->handle();
     }
 
-    private function handle(int $dealId): void
+    private function handle(): void
     {
-        $dealDTO = (new DealRepository())->getDeal($dealId);
-
-        if ($dealDTO->getCategoryId() == 6
-            && $dealDTO->getStageId() !== $dealDTO->getLastStageAppLaunch()
+        if ($this->dealDTO->getCategoryId() == 6
+            && $this->dealDTO->getStageId() !== $this->dealDTO->getLastStageAppLaunch()
         ) {
-            switch ($dealDTO->getStageId()) {
+            switch ($this->dealDTO->getStageId()) {
                 case 'C6:PREPARATION': // Init
-                    $createTrainings = new CreateTrainingsAction($dealDTO);
+                    $createTrainings = new CreateTrainingsAction($this->dealDTO);
                     $createTrainings->execute();
+                    $this->updLastStageAppLaunch();
                     break;
                 case 'C6:PREPAYMENT_INVOICE': // Pause
-                    $pauseTrainings = new PauseTrainingsAction($dealDTO);
+                    $pauseTrainings = new PauseTrainingsAction($this->dealDTO);
                     $pauseTrainings->execute();
+                    $this->updLastStageAppLaunch();
                     break;
                 default:
                     # code...
                     break;
             }
         }
+    }
+
+    private function updLastStageAppLaunch(): void
+    {
+        $this->dealRepository->updateDeal($this->dealDTO->getId(), [
+            "lastStageAppLaunch" => $this->dealDTO->getStageId(),
+        ]);
     }
 }
