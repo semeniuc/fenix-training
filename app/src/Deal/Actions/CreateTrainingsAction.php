@@ -25,6 +25,7 @@ class CreateTrainingsAction
         $trainingSchedule = $this->generateSchedule();
 
         if ($trainingSchedule) {
+            # TODO: Перед созданием тренировок проверять наличие существующих
             // Create trainings
             $trainingsCollection = $this->createTrainings($trainingSchedule);
 
