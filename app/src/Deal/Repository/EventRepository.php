@@ -93,9 +93,6 @@ class EventRepository
                 ];
             }
         }
-
-        $batch = Bitrix::callBatch($arData)["result"]["result"] ?? [];
-
-        dd(["deleteEvents" => $batch]);
+            Bitrix::callBatch($arData)["result"]["result"] ?? [];
     }
 }

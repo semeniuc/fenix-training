@@ -26,14 +26,18 @@ class PauseTrainingsAction
             && $this->dealDTO->getEndDatePause()
         ) {
             # TODO: Закрыть тренировки которые совпадают с паузой
-            $trainingsCollection = $this->getTrainingsToClose();
+            $trainingsCollection = $this->getTrainings();
 
-            if (!empty($trainingsCollection)) {
-                $this->closeTrainings($trainingsCollection);
-                $this->deleteEvents($trainingsCollection);
+            $trainingsToCloseCollection = $this->getTrainingsToClose($trainingsCollection);
+            if (!empty($trainingsToCloseCollection)) {
+                $this->closeTrainings($trainingsToCloseCollection);
+                $this->deleteEvents($trainingsToCloseCollection);
             }
 
-            dd($trainingsCollection);
+            dd([
+                "trainingsCollection" => $trainingsCollection,
+                "trainingsToCloseCollection" => $trainingsToCloseCollection,
+            ]);
 
             # TODO: Посчитать кол-во оставшихся тренировок
             # TODO: Найти последнюю запланированную тренировку, либо использовать дату окончания паузы
@@ -42,10 +46,13 @@ class PauseTrainingsAction
         }
     }
 
-    private function getTrainingsToClose(): array
+    private function getTrainings(): array
     {
-        $trainingsCollection = $this->trainingRepository->getTrainings($this->dealDTO->getId());
+        return $this->trainingRepository->getTrainings($this->dealDTO->getId());
+    }
 
+    private function getTrainingsToClose(array $trainingsCollection): array
+    {
         # Exclude stages
         if (!empty($trainingsCollection)) {
             $trainingsCollection = $this->excludeStages($trainingsCollection);
