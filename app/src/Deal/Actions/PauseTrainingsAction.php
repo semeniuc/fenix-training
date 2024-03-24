@@ -34,12 +34,17 @@ class PauseTrainingsAction
                 $this->deleteEvents($trainingsToCloseCollection);
             }
 
+            # TODO: Посчитать кол-во оставшихся тренировок
+            $trainingsActiveCollection = array_diff_key($trainingsCollection, $trainingsToCloseCollection);
+
+
             dd([
                 "trainingsCollection" => $trainingsCollection,
                 "trainingsToCloseCollection" => $trainingsToCloseCollection,
+                "trainingsActiveCollection" => $trainingsActiveCollection,
             ]);
 
-            # TODO: Посчитать кол-во оставшихся тренировок
+
             # TODO: Найти последнюю запланированную тренировку, либо использовать дату окончания паузы
             # TODO: Сгенирировать новый график тренировок
             # TODO: Создать тренировки
@@ -90,7 +95,8 @@ class PauseTrainingsAction
         foreach ($trainingsCollection as $key => $trainingDTO) {
             $datetimeTraining = $trainingDTO->getDatetimeTraining();
 
-            if (($datetimeTraining >= $startPause && $datetimeTraining <= $endPause) !== true) {
+            if ($datetimeTraining->getTimestamp() < $startPause->getTimestamp()
+                || $datetimeTraining->getTimestamp() > $endPause->getTimestamp()) {
                 unset($trainingsCollection[$key]);
             }
         }
