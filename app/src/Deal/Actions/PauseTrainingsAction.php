@@ -7,6 +7,8 @@ namespace Beupsoft\Fenix\App\Deal\Actions;
 use Beupsoft\Fenix\App\Deal\DealDTO;
 use Beupsoft\Fenix\App\Deal\Repository\EventRepository;
 use Beupsoft\Fenix\App\Deal\Repository\TrainingRepository;
+use Beupsoft\Fenix\App\Deal\Tools\GenerateSchedule;
+use Beupsoft\Fenix\App\Training\TrainingDTO;
 
 class PauseTrainingsAction
 {
@@ -34,20 +36,33 @@ class PauseTrainingsAction
                 $this->deleteEvents($trainingsToCloseCollection);
             }
 
-            # TODO: Посчитать кол-во оставшихся тренировок
+            # TODO: Посчитать кол-во возможных оставшихся тренировок
             $trainingsActiveCollection = array_diff_key($trainingsCollection, $trainingsToCloseCollection);
+            $trainingsActiveCollection = $this->getActiveTrainings($trainingsActiveCollection);
+            $numberTrainings = $this->dealDTO->getNumberTrainings() - count($trainingsActiveCollection);
 
+            # TODO: Найти последнюю запланированную тренировку, либо использовать дату окончания паузы
+            $startDate = $this->dealDTO->getEndDatePause();
+            if (!empty($trainingsActiveCollection)) {
+                $lastTrainingDTO = $this->getLastTraining($trainingsActiveCollection);
+                if ($startDate->getTimestamp() < $lastTrainingDTO->getDatetimeTraining()->getTimestamp()) {
+                    $startDate = $lastTrainingDTO->getDatetimeTraining();
+                }
+            }
+
+            if ($numberTrainings > 0) {
+                # TODO: Сгенирировать новый график тренировок
+                $trainingSchedule = $this->generateSchedule($startDate, $numberTrainings);
+                # TODO: Создать тренировки
+            }
 
             dd([
+                "numberTrainings" => $numberTrainings,
+                "trainingSchedule" => $trainingSchedule ?? null,
                 "trainingsCollection" => $trainingsCollection,
                 "trainingsToCloseCollection" => $trainingsToCloseCollection,
                 "trainingsActiveCollection" => $trainingsActiveCollection,
             ]);
-
-
-            # TODO: Найти последнюю запланированную тренировку, либо использовать дату окончания паузы
-            # TODO: Сгенирировать новый график тренировок
-            # TODO: Создать тренировки
         }
     }
 
@@ -60,7 +75,7 @@ class PauseTrainingsAction
     {
         # Exclude stages
         if (!empty($trainingsCollection)) {
-            $trainingsCollection = $this->excludeStages($trainingsCollection);
+            $trainingsCollection = $this->excludeStages($trainingsCollection, ["DT149_30:FAIL", "DT149_30:SUCCESS"]);
         }
 
         # Exclude time
@@ -71,13 +86,8 @@ class PauseTrainingsAction
         return $trainingsCollection;
     }
 
-    private function excludeStages(array $trainingsCollection): array
+    private function excludeStages(array $trainingsCollection, array $stageExcluded): array
     {
-        $stageExcluded = [
-            "DT149_30:FAIL",
-            "DT149_30:SUCCESS"
-        ];
-
         foreach ($trainingsCollection as $key => $trainingDTO) {
             if (in_array($trainingDTO->getStageId(), $stageExcluded)) {
                 unset($trainingsCollection[$key]);
@@ -126,5 +136,34 @@ class PauseTrainingsAction
     private function deleteEvents(array $trainingsCollection): void
     {
         $this->eventRepository->deleteEvents($trainingsCollection);
+    }
+
+    private function getActiveTrainings(array $trainingsCollection)
+    {
+        return $this->excludeStages($trainingsCollection, ["DT149_30:FAIL"]);
+    }
+
+    private function getLastTraining(array $trainingsCollection): TrainingDTO
+    {
+        $lastTrainingDTO = null;
+
+        foreach ($trainingsCollection as $key => $trainingDTO) {
+            if ($trainingDTO->getDatetimeTraining() > $lastTrainingDTO?->getDatetimeTraining()) {
+                $lastTrainingDTO = $trainingDTO;
+            }
+        }
+
+        return $lastTrainingDTO;
+    }
+
+    private function generateSchedule(\DateTime $startDate, int $numberTrainings): array
+    {
+        $schedule = new GenerateSchedule(
+            $startDate,
+            $this->dealDTO->getDaysAndTime(),
+            $numberTrainings
+        );
+
+        return $schedule->get();
     }
 }
