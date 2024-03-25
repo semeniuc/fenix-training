@@ -7,7 +7,10 @@ namespace Beupsoft\Fenix\App\Deal\Actions;
 use Beupsoft\Fenix\App\Deal\DealDTO;
 use Beupsoft\Fenix\App\Deal\Repository\EventRepository;
 use Beupsoft\Fenix\App\Deal\Repository\TrainingRepository;
+use Beupsoft\Fenix\App\Deal\Tools\CreateEvents;
+use Beupsoft\Fenix\App\Deal\Tools\CreateTrainings;
 use Beupsoft\Fenix\App\Deal\Tools\GenerateSchedule;
+use Beupsoft\Fenix\App\Deal\Tools\UpdateTrainings;
 use Beupsoft\Fenix\App\Training\TrainingDTO;
 
 class PauseTrainingsAction
@@ -27,21 +30,21 @@ class PauseTrainingsAction
             $this->dealDTO->getStartDatePause()
             && $this->dealDTO->getEndDatePause()
         ) {
-            # TODO: Закрыть тренировки которые совпадают с паузой
             $trainingsCollection = $this->getTrainings();
 
+            # Close workouts that coincide with pause dates
             $trainingsToCloseCollection = $this->getTrainingsToClose($trainingsCollection);
             if (!empty($trainingsToCloseCollection)) {
                 $this->closeTrainings($trainingsToCloseCollection);
                 $this->deleteEvents($trainingsToCloseCollection);
             }
 
-            # TODO: Посчитать кол-во возможных оставшихся тренировок
+            # Calculation of the number of possible remaining workouts
             $trainingsActiveCollection = array_diff_key($trainingsCollection, $trainingsToCloseCollection);
             $trainingsActiveCollection = $this->getActiveTrainings($trainingsActiveCollection);
             $numberTrainings = $this->dealDTO->getNumberTrainings() - count($trainingsActiveCollection);
 
-            # TODO: Найти последнюю запланированную тренировку, либо использовать дату окончания паузы
+            # Find the last scheduled workout, or use the pause end date
             $startDate = $this->dealDTO->getEndDatePause();
             if (!empty($trainingsActiveCollection)) {
                 $lastTrainingDTO = $this->getLastTraining($trainingsActiveCollection);
@@ -51,18 +54,29 @@ class PauseTrainingsAction
             }
 
             if ($numberTrainings > 0) {
-                # TODO: Сгенирировать новый график тренировок
+                # Generate a new training schedule
                 $trainingSchedule = $this->generateSchedule($startDate, $numberTrainings);
-                # TODO: Создать тренировки
-            }
 
-            dd([
-                "numberTrainings" => $numberTrainings,
-                "trainingSchedule" => $trainingSchedule ?? null,
-                "trainingsCollection" => $trainingsCollection,
-                "trainingsToCloseCollection" => $trainingsToCloseCollection,
-                "trainingsActiveCollection" => $trainingsActiveCollection,
-            ]);
+
+                if (!empty($trainingSchedule)) {
+                    # Create trainings
+                    $addedTrainingsCollection = $this->createTrainings($trainingSchedule);
+
+                    # Get time statuses
+                    $unavailableTime = $this->getUnavailableTime($addedTrainingsCollection);
+                    $availableTime = array_diff_key($addedTrainingsCollection, $unavailableTime);
+
+                    # Create events
+                    if (!empty($availableTime)) {
+                        $this->createEvents($availableTime);
+                    }
+
+                    # Set conflict status
+                    if (!empty($unavailableTime)) {
+                        $this->setConflictStatusForTrainings($unavailableTime);
+                    }
+                }
+            }
         }
     }
 
@@ -116,21 +130,8 @@ class PauseTrainingsAction
 
     private function closeTrainings(array $trainingsCollection): void
     {
-        $data = [];
-        foreach ($trainingsCollection as $trainingDto) {
-            $trainingId = $trainingDto->getId();
-
-            $data[$trainingId] = [
-                "id" => $trainingId,
-                "fields" => [
-                    "stageId" => "DT149_30:FAIL",
-                    "eventId" => "",
-                    "whoIsClosed" => 484,
-                ],
-            ];
-        }
-
-        $this->trainingRepository->updateTrainings($data);
+        $handler = new UpdateTrainings();
+        $handler->closeTrainings($trainingsCollection);
     }
 
     private function deleteEvents(array $trainingsCollection): void
@@ -138,7 +139,7 @@ class PauseTrainingsAction
         $this->eventRepository->deleteEvents($trainingsCollection);
     }
 
-    private function getActiveTrainings(array $trainingsCollection)
+    private function getActiveTrainings(array $trainingsCollection): array
     {
         return $this->excludeStages($trainingsCollection, ["DT149_30:FAIL"]);
     }
@@ -165,5 +166,28 @@ class PauseTrainingsAction
         );
 
         return $schedule->get();
+    }
+
+    private function createTrainings(array $datetimeCollection): array
+    {
+        $handler = new CreateTrainings($this->dealDTO);
+        return $handler->execute($datetimeCollection);
+    }
+
+    private function getUnavailableTime(array $trainingsCollection): array
+    {
+        return $this->eventRepository->getUnavailableTime($trainingsCollection);
+    }
+
+    private function createEvents(array $trainingsCollection): void
+    {
+        $handler = new CreateEvents();
+        $handler->createEvents($trainingsCollection);
+    }
+
+    private function setConflictStatusForTrainings(array $trainingsCollection): void
+    {
+        $handler = new UpdateTrainings();
+        $handler->setConflictStatusForTrainings($trainingsCollection);
     }
 }
